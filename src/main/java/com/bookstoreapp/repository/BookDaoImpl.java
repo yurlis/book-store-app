@@ -1,21 +1,17 @@
-package mate.academy.repository;
+package com.bookstoreapp.repository;
 
+import com.bookstoreapp.model.Book;
 import java.util.List;
-import mate.academy.model.Book;
+import lombok.RequiredArgsConstructor;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 
-@Repository
+@Component
+@RequiredArgsConstructor
 public class BookDaoImpl implements BookRepository {
     private final SessionFactory sessionFactory;
-
-    @Autowired
-    public BookDaoImpl(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
-    }
 
     @Override
     public Book save(Book book) {

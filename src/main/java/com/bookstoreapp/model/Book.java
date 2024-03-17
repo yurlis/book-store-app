@@ -1,4 +1,4 @@
-package mate.academy.model;
+package com.bookstoreapp.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

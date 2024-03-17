@@ -1,7 +1,7 @@
-package mate.academy;
+package com.bookstoreapp;
 
-import mate.academy.model.Book;
-import mate.academy.service.BookService;
+import com.bookstoreapp.model.Book;
+import com.bookstoreapp.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
