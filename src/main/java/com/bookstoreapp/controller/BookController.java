@@ -1,6 +1,7 @@
 package com.bookstoreapp.controller;
 
 import com.bookstoreapp.dto.BookDto;
+import com.bookstoreapp.dto.BookSearchParameters;
 import com.bookstoreapp.dto.CreateBookRequestDto;
 import com.bookstoreapp.service.BookService;
 
@@ -51,4 +52,10 @@ public class BookController {
     public void deleteBook(@PathVariable Long id) {
         bookService.deleteByID(id);
     }
+
+    @GetMapping("/search")
+    public List<BookDto> searchBooks(BookSearchParameters searchParameters) {
+        return bookService.search(searchParameters);
+    }
+
 }
