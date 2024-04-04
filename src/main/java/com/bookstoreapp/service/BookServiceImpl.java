@@ -1,8 +1,9 @@
 package com.bookstoreapp.service;
 
-import com.bookstoreapp.dto.BookDto;
-import com.bookstoreapp.dto.BookSearchParameters;
-import com.bookstoreapp.dto.CreateBookRequestDto;
+
+import com.bookstoreapp.dto.book.BookDto;
+import com.bookstoreapp.dto.book.BookSearchParameters;
+import com.bookstoreapp.dto.book.CreateBookRequestDto;
 import com.bookstoreapp.exception.EntityNotFoundException;
 import com.bookstoreapp.mapper.BookMapper;
 import com.bookstoreapp.model.Book;
@@ -18,7 +19,6 @@ import org.springframework.stereotype.Service;
 public class BookServiceImpl implements BookService {
     private final BookRepository bookRepository;
     private final BookMapper bookMapper;
-
     private final BookSpecificationBuilder bookSpecificationBuilder;
 
     @Override

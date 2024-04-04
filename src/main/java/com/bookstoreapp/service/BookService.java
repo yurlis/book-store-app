@@ -1,9 +1,8 @@
 package com.bookstoreapp.service;
 
-import com.bookstoreapp.dto.BookDto;
-import com.bookstoreapp.dto.BookSearchParameters;
-import com.bookstoreapp.dto.CreateBookRequestDto;
-import org.springframework.data.jpa.domain.Specification;
+import com.bookstoreapp.dto.book.BookDto;
+import com.bookstoreapp.dto.book.BookSearchParameters;
+import com.bookstoreapp.dto.book.CreateBookRequestDto;
 
 import java.util.List;
 

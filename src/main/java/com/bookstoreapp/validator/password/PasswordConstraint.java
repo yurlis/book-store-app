@@ -1,4 +1,4 @@
-package com.bookstoreapp.validator;
+package com.bookstoreapp.validator.password;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
@@ -8,13 +8,12 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Constraint(validatedBy = IsbnValidator.class)
-@Target({ElementType.PARAMETER, ElementType.FIELD})
+@Constraint(validatedBy = PasswordCustomValidator.class)
+@Target({ ElementType.METHOD, ElementType.FIELD })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Isbn {
-    String message() default "Invalid format isbn";
-
+public @interface PasswordConstraint {
+    String message() default "must be at least 8 characters long "
+            + "and include one number, one letter, and one special character.";
     Class<?>[] groups() default {};
-
     Class<? extends Payload>[] payload() default {};
 }

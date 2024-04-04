@@ -1,11 +1,11 @@
-package com.bookstoreapp.validator;
+package com.bookstoreapp.validator.isbn;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
 import java.util.regex.Pattern;
 
-public class IsbnValidator implements ConstraintValidator<Isbn, String> {
+public class IsbnCustomValidator implements ConstraintValidator<IsbnConstraint, String> {
     private static final String PATTERN_OF_ISBN = "^(?=(?:\\D*\\d){10}(?:(?:\\D*\\d){3})?$)[\\d-]+$";
     /*
 Это регулярное выражение используется для проверки строки на соответствие шаблону, который включает в себя последовательность из 10 цифр, разделённых возможными нецифровыми символами (например, дефисами). Однако, последняя группа из трёх цифр может быть опциональной.
