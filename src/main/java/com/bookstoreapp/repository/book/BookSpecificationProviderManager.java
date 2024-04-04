@@ -1,6 +1,6 @@
 package com.bookstoreapp.repository.book;
 
-import com.bookstoreapp.model.Book;
+import com.bookstoreapp.controller.model.Book;
 import com.bookstoreapp.repository.SpecificationProvider;
 import com.bookstoreapp.repository.SpecificationProviderManager;
 import lombok.RequiredArgsConstructor;
