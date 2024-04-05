@@ -17,7 +17,6 @@ public class UserRegistrationRequestDto {
     @Email
     private String email;
     @NotBlank
-//    @Length(min = 8, max = 35, message = "Password must be between 5 and 35 characters")
     @PasswordConstraint
     private String password;
     @NotBlank
