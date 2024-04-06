@@ -1,6 +1,5 @@
 package com.bookstoreapp.dto.user;
 
-import com.bookstoreapp.controller.model.User;
 import lombok.Data;
 
 @Data

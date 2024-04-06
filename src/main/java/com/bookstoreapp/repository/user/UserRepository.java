@@ -1,6 +1,6 @@
 package com.bookstoreapp.repository.user;
 
-import com.bookstoreapp.controller.model.User;
+import com.bookstoreapp.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

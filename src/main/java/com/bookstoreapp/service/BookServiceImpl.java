@@ -6,7 +6,7 @@ import com.bookstoreapp.dto.book.BookSearchParameters;
 import com.bookstoreapp.dto.book.CreateBookRequestDto;
 import com.bookstoreapp.exception.EntityNotFoundException;
 import com.bookstoreapp.mapper.BookMapper;
-import com.bookstoreapp.controller.model.Book;
+import com.bookstoreapp.model.Book;
 import com.bookstoreapp.repository.book.BookRepository;
 import com.bookstoreapp.repository.book.BookSpecificationBuilder;
 

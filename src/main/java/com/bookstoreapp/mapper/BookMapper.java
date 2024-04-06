@@ -3,7 +3,7 @@ package com.bookstoreapp.mapper;
 import com.bookstoreapp.config.MapperConfig;
 import com.bookstoreapp.dto.book.BookDto;
 import com.bookstoreapp.dto.book.CreateBookRequestDto;
-import com.bookstoreapp.controller.model.Book;
+import com.bookstoreapp.model.Book;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 

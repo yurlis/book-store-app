@@ -1,6 +1,6 @@
 package com.bookstoreapp.repository.book.spec;
 
-import com.bookstoreapp.controller.model.Book;
+import com.bookstoreapp.model.Book;
 import com.bookstoreapp.repository.SpecificationProvider;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
