@@ -5,5 +5,6 @@ import com.bookstoreapp.dto.user.UserRegistrationResponseDto;
 import com.bookstoreapp.exception.RegistrationException;
 
 public interface UserService {
-    UserRegistrationResponseDto register(UserRegistrationRequestDto requestDto) throws RegistrationException;
+    UserRegistrationResponseDto register(UserRegistrationRequestDto requestDto)
+            throws RegistrationException;
 }
