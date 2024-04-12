@@ -21,7 +21,7 @@
 		<maven.checkstyle.plugin.configLocation>checkstyle.xml</maven.checkstyle.plugin.configLocation>
 		<lombok.mapstruct.binding.version>0.2.0</lombok.mapstruct.binding.version>
 		<mapstruct.version>1.5.5.Final</mapstruct.version>
-		<jjwt.version>0.11.5</jjwt.version>
+		<jjwt.version>0.12.5</jjwt.version>
 	</properties>
 
 	<dependencies>

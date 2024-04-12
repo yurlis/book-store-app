@@ -22,17 +22,15 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtUtil jwtUtil;
     private final UserDetailsService userDetailsService;
-
+    final String AUTHORIZATION_HEADER_SECTION_NAME = "Authorization";
+    final String AUTHORIZATION_TYPE_NAME = "Bearer ";
     @Override
     protected void doFilterInternal(
             HttpServletRequest request,
             HttpServletResponse response,
             FilterChain filterChain
     ) throws ServletException, IOException {
-        // Authrization: Bearer ldkfgdfg.fdgdfgdfg.dfgdfgdfgfd // 3 частини     or Basic
         String token = getToken(request);
-
-//        boolean isTokenValid = jwtUtil.isValidToken(token);
         if (token != null && jwtUtil.isValidToken(token)) {
             String username = jwtUtil.getUsername(token);
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
@@ -45,9 +43,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     private String getToken(HttpServletRequest request) {
-        String bearerToken = request.getHeader("Authorization");
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
-            return bearerToken.substring(7);
+        String bearerToken = request.getHeader(AUTHORIZATION_HEADER_SECTION_NAME);
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(AUTHORIZATION_TYPE_NAME)) {
+            return bearerToken.substring(AUTHORIZATION_TYPE_NAME.length());
         }
         return null;
     }
