@@ -1,0 +1,30 @@
+databaseChangeLog:
+  - changeSet:
+      id: populate-books-categories-table
+      author: zorrolis
+      changes:
+        - insert:
+            tableName: books_categories
+            columns:
+              - column: { name: "book_id", valueComputed: "(SELECT id FROM books WHERE title = 'Java Concurrency in Practice')" }
+              - column: { name: "category_id", valueComputed: "(SELECT id FROM categories WHERE name = 'Java for starter')" }
+        - insert:
+            tableName: books_categories
+            columns:
+              - column: { name: "book_id", valueComputed: "(SELECT id FROM books WHERE title = 'Head First Java')" }
+              - column: { name: "category_id", valueComputed: "(SELECT id FROM categories WHERE name = 'Java for starter')" }
+        - insert:
+            tableName: books_categories
+            columns:
+              - column: { name: "book_id", valueComputed: "(SELECT id FROM books WHERE title = 'Effective Java')" }
+              - column: { name: "category_id", valueComputed: "(SELECT id FROM categories WHERE name = 'Java for middle')" }
+        - insert:
+            tableName: books_categories
+            columns:
+              - column: { name: "book_id", valueComputed: "(SELECT id FROM books WHERE title = 'Clean Code')" }
+              - column: { name: "category_id", valueComputed: "(SELECT id FROM categories WHERE name = 'Java for middle')" }
+        - insert:
+            tableName: books_categories
+            columns:
+              - column: { name: "book_id", valueComputed: "(SELECT id FROM books WHERE title = 'Design Patterns: Elements of Reusable Object-Oriented Software')" }
+              - column: { name: "category_id", valueComputed: "(SELECT id FROM categories WHERE name = 'Java for senior')" }

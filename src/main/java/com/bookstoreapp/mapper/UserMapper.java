@@ -7,8 +7,10 @@ import com.bookstoreapp.model.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
+import org.springframework.stereotype.Component;
 
 @Mapper(config = MapperConfig.class, uses = PasswordEncoderHelper.class)
+@Component
 public interface UserMapper {
     UserRegistrationResponseDto toRegistrationResponseDto(User user);
 

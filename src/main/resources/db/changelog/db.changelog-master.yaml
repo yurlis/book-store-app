@@ -19,3 +19,11 @@ databaseChangeLog:
       file: db/changelog/changes/09-update-field-password-to-hash-mode.yaml
   - include:
       file: db/changelog/changes/10-insert-books.yaml
+  - include:
+      file: db/changelog/changes/11-create-categories-table.yaml
+  - include:
+      file: db/changelog/changes/12-insert-categories.yaml
+  - include:
+      file: db/changelog/changes/13-create-books-categories-table.yaml
+  - include:
+      file: db/changelog/changes/14-fill-books-categories-table.yaml
