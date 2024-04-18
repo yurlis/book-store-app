@@ -11,8 +11,6 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -33,7 +31,7 @@ public interface BookMapper {
     @Mapping(target = "categories", ignore = true)
     Book toModel(CreateBookRequestDto requestDto);
 
-//    @AfterMapping ---------- ?????
+//    @AfterMapping ---------- i don't know why it don't work ?????
 //    default void setCategories(@MappingTarget Book book, CreateBookRequestDto requestDto) {
 //        Set<Category> categories = requestDto.getCategories().stream()
 //                .map(Category::new)
