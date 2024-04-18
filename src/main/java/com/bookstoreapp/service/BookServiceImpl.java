@@ -2,6 +2,7 @@ package com.bookstoreapp.service;
 
 
 import com.bookstoreapp.dto.book.BookDto;
+import com.bookstoreapp.dto.book.BookDtoWithoutCategoryIds;
 import com.bookstoreapp.dto.book.BookSearchParameters;
 import com.bookstoreapp.dto.book.CreateBookRequestDto;
 import com.bookstoreapp.exception.EntityNotFoundException;
@@ -9,7 +10,6 @@ import com.bookstoreapp.mapper.BookMapper;
 import com.bookstoreapp.model.Book;
 import com.bookstoreapp.repository.book.BookRepository;
 import com.bookstoreapp.repository.book.BookSpecificationBuilder;
-
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -31,7 +31,8 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<BookDto> findAll(Pageable pageable) {
-        return bookRepository.findAll(pageable).stream()
+//        return bookRepository.findAll(pageable).stream()
+        return bookRepository.findAllWithCategories(pageable).stream()
                 .map(bookMapper::toDto)
                 .toList();
     }
@@ -39,7 +40,7 @@ public class BookServiceImpl implements BookService {
     @Override
     public BookDto findById(Long id) {
         Book book = bookRepository.findById(id).orElseThrow(
-                () -> new EntityNotFoundException("Can't find employee by id " + id)
+                () -> new EntityNotFoundException("Can't find book by id " + id)
         );
         return bookMapper.toDto(book);
     }
@@ -47,7 +48,7 @@ public class BookServiceImpl implements BookService {
     @Override
     public BookDto update(Long id, CreateBookRequestDto requestDto) {
         Book book = bookRepository.findById(id).orElseThrow(
-                () -> new EntityNotFoundException("Can't find employee by id " + id)
+                () -> new EntityNotFoundException("Can't find book by id " + id)
         );
         bookMapper.updateFromDto(book, requestDto);
         return bookMapper.toDto(bookRepository.save(book));
@@ -58,10 +59,18 @@ public class BookServiceImpl implements BookService {
         bookRepository.deleteById(id);
     }
 
+    @Override
     public List<BookDto> search(BookSearchParameters params) {
         Specification<Book> bookSpecification = bookSpecificationBuilder.build(params);
         return bookRepository.findAll(bookSpecification).stream()
                 .map(bookMapper::toDto)
+                .toList();
+    }
+
+    @Override
+    public List<BookDtoWithoutCategoryIds> findBooksByCategoryId(Long id, Pageable pageable) {
+        return bookRepository.findAllByCategoryId(id, pageable).stream()
+                .map(bookMapper::toDtoWithoutCategories)
                 .toList();
     }
 }

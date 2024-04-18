@@ -1,0 +1,20 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-categories
+      author: zorrolis
+      changes:
+        - insert:
+            tableName: categories
+            columns:
+              - column: { name: name, value: "Java for starter" }
+              - column: { name: description, value: "Description of Java for starter category" }
+        - insert:
+            tableName: categories
+            columns:
+              - column: { name: name, value: "Java for middle" }
+              - column: { name: description, value: "Description of Java for starter category" }
+        - insert:
+            tableName: categories
+            columns:
+              - column: { name: name, value: "Java for senior" }
+              - column: { name: description, value: "Description of Java for senior category" }
