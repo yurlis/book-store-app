@@ -6,8 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -16,51 +15,35 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
-import org.hibernate.annotations.Where;
-
-import java.math.BigDecimal;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @SQLRestriction("is_deleted=false")
-@SQLDelete(sql = "UPDATE books SET is_deleted = true WHERE id=?")
-@Table(name = "books")
+@SQLDelete(sql = "UPDATE cart_items SET is_deleted = true WHERE id=?")
+@Table(name = "cart_items")
 @NoArgsConstructor
 @Getter
 @Setter
-public class Book {
+public class CartItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String title;
-
-    private String author;
-
-    @Column(unique = true)
-    private String isbn;
-
-    private BigDecimal price;
-
-    private String description;
-
-    private String coverImage;
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    @ManyToMany
-    @JoinTable(
-            name = "books_categories",
-            joinColumns = @JoinColumn(name = "book_id"),
-            inverseJoinColumns = @JoinColumn(name = "category_id")
-    )
-    private Set<Category> categories = new HashSet<>();
+    @ManyToOne
+    @JoinColumn(name = "shopping_cart_id", nullable = false)
+    private ShoppingCart shoppingCart;
+
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @ManyToOne
+    @JoinColumn(name = "book_id", nullable = false)
+    private Book book;
+
+    @Column(name = "quantity", nullable = false)
+    private int quantity;
 
     @Column(name = "is_deleted",
             nullable = false)
     private boolean isDeleted = false;
-
-    public Book(Long id) {
-        this.id = id;
-    }
 }

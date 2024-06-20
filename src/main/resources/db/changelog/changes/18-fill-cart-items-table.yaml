@@ -1,0 +1,23 @@
+databaseChangeLog:
+  - changeSet:
+      id: fill-cart-items-table
+      author: zoorolis
+      changes:
+        - insert:
+            tableName: cart_items
+            columns:
+              - column: { name: "shopping_cart_id", valueComputed: "(SELECT id FROM users WHERE email = 'user1@example.com')" }
+              - column: { name: "book_id", valueComputed: "(SELECT id FROM books WHERE title = 'Head First Java')" }
+              - column: { name: "quantity", value: "1" }
+        - insert:
+            tableName: cart_items
+            columns:
+              - column: { name: "shopping_cart_id", valueComputed: "(SELECT id FROM users WHERE email = 'user2@example.com')" }
+              - column: { name: "book_id", valueComputed: "(SELECT id FROM books WHERE title = 'Effective Java')" }
+              - column: { name: "quantity", value: "3" }
+        - insert:
+            tableName: cart_items
+            columns:
+              - column: { name: "shopping_cart_id", valueComputed: "(SELECT id FROM users WHERE email = 'user3@example.com')" }
+              - column: { name: "book_id", valueComputed: "(SELECT id FROM books WHERE title = 'Clean Code')" }
+              - column: { name: "quantity", value: "2" }
