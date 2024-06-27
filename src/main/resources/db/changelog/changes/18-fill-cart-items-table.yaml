@@ -1,7 +1,7 @@
 databaseChangeLog:
   - changeSet:
       id: fill-cart-items-table
-      author: zoorolis
+      author: zorrolis
       changes:
         - insert:
             tableName: cart_items
