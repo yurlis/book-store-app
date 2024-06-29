@@ -31,8 +31,6 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
-    @PersistenceContext
-    private EntityManager entityManager;
     private final ShoppingCartRepository cartRepository;
     private final CartItemRepository cartItemRepository;
     private final OrderMapper orderMapper;
@@ -81,17 +79,21 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderDto> findAll(Long userId, Pageable pageable) {
-        return orderRepository.findAllByUserId(userId, pageable).stream()
-                .map(orderMapper::toDto)
-                .toList();
+        List<Order> orders = orderRepository.findAllByUserId(userId, pageable);
+        return orderMapper.toDto(orders);
+//        return orderRepository.findAllByUserId(userId, pageable).stream()
+//                .map(orderMapper::toDto)
+//                .toList();
     }
 
     @Override
     public List<OrderItemDto> findAllOrderItemsByOrderId(Long userId, Long orderId) {
         Order orderFromDb = getOrderFromDbByUserIdAndOrderId(userId, orderId);
-        return orderFromDb.getOrderItems().stream()
-                .map(orderItemMapper::toDto)
-                .toList();
+        Set<OrderItem> orderItems = orderFromDb.getOrderItems();
+        return orderItemMapper.toDto(orderItems);
+//        return orderFromDb.getOrderItems().stream()
+//                .map(orderItemMapper::toDto)
+//                .toList();
     }
 
     @Override

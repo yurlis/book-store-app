@@ -8,6 +8,9 @@ import com.bookstoreapp.model.OrderItem;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+import java.util.List;
+import java.util.Set;
+
 @Mapper(config = MapperConfig.class)
 public interface OrderItemMapper {
     @Mapping(target = "price", ignore = true)
@@ -15,6 +18,7 @@ public interface OrderItemMapper {
     OrderItem toOrderItemModel(CartItem cartItem);
 
     @Mapping(target = "bookId", source = "book.id")
-    @Mapping(target = "quantity", source = "quantity")
     OrderItemDto toDto(OrderItem orderItem);
+
+    List<OrderItemDto> toDto(Set<OrderItem> orderItems);
 }

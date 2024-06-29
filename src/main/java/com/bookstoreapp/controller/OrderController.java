@@ -37,8 +37,7 @@ public class OrderController {
             description = "Create a new order for the authenticated user")
     OrderDto placeOrder(Authentication authentication,
                         @RequestBody @Valid PlaceOrderRequestDto requestDto) {
-        User user = (User) authentication.getPrincipal();
-        return orderService.save(user.getId(), requestDto);
+        return orderService.save(getUserId(authentication), requestDto);
     }
 
     @GetMapping
@@ -46,8 +45,7 @@ public class OrderController {
     @Operation(summary = "Get all orders",
             description = "Get all orders for the authenticated user")
     List<OrderDto> getAllOrders(Authentication authentication, Pageable pageable) {
-        User user = (User) authentication.getPrincipal();
-        return orderService.findAll(user.getId(), pageable);
+        return orderService.findAll(getUserId(authentication), pageable);
     }
 
     @PatchMapping("/{id}")
@@ -66,8 +64,7 @@ public class OrderController {
             description = "Get all items for the specific order")
     List<OrderItemDto> getAllOrderItems(Authentication authentication,
                                         @PathVariable Long orderId) {
-        User user = (User) authentication.getPrincipal();
-        return orderService.findAllOrderItemsByOrderId(user.getId(), orderId);
+        return orderService.findAllOrderItemsByOrderId(getUserId(authentication), orderId);
     }
 
     @GetMapping("{orderId}/items/{itemId}")
@@ -77,7 +74,11 @@ public class OrderController {
     OrderItemDto getOrderItem(Authentication authentication,
                               @PathVariable Long itemId,
                               @PathVariable Long orderId) {
+        return orderService.findOrderItemById(getUserId(authentication), itemId, orderId);
+    }
+
+    private Long getUserId(Authentication authentication) {
         User user = (User) authentication.getPrincipal();
-        return orderService.findOrderItemById(user.getId(), itemId, orderId);
+        return user.getId();
     }
 }
