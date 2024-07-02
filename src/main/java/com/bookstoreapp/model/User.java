@@ -26,8 +26,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Entity
-@SQLRestriction("is_deleted=false")
-@SQLDelete(sql = "UPDATE users SET is_deleted = true WHERE id=?")
+@SQLRestriction("is_deleted = FALSE")
+@SQLDelete(sql = "UPDATE users SET is_deleted = TRUE WHERE id = ?")
 @Table(name = "users")
 @NoArgsConstructor
 @Getter
