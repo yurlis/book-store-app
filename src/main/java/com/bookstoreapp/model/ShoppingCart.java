@@ -20,8 +20,8 @@ import org.hibernate.annotations.SQLRestriction;
 import java.util.Set;
 
 @Entity
-@SQLRestriction("is_deleted=false")
-@SQLDelete(sql = "UPDATE shoppingcarts SET is_deleted = true WHERE id=?")
+@SQLRestriction("is_deleted = FALSE")
+@SQLDelete(sql = "UPDATE shopping_carts SET is_deleted = TRUE WHERE id = ?")
 @Table(name = "shopping_carts")
 @NoArgsConstructor
 @Getter

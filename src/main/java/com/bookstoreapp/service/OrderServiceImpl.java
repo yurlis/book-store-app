@@ -15,8 +15,6 @@ import com.bookstoreapp.repository.order.OrderRepository;
 import com.bookstoreapp.repository.shoppingcart.CartItemRepository;
 import com.bookstoreapp.repository.shoppingcart.ShoppingCartRepository;
 import com.bookstoreapp.repository.user.UserRepository;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -42,27 +40,17 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     public OrderDto save(Long userId, PlaceOrderRequestDto requestDto) {
         Order order = new Order();
-        ShoppingCart cartFromDB = getCartFromDB(userId);
 
         order.setUser(userRepository.findById(userId).orElseThrow(
-                () -> new RuntimeException("Cannot find user by user id: " + userId)));
+                () -> new EntityNotFoundException("Cannot find user by user id: " + userId)));
         order.setShippingAddress(requestDto.shippingAddress());
         order.setStatus(Order.Status.PENDING);
         order.setOrderDate(LocalDateTime.now());
-        order.setTotal(BigDecimal.valueOf(0));
+        order.setTotal(BigDecimal.ZERO);
         orderRepository.save(order);
 
-        final Order finalOrder = order;
-        Set<OrderItem> orderItems = cartFromDB.getCartItems().stream()
-                .map(cartItem -> {
-                    OrderItem orderItem = orderItemMapper.toOrderItemModel(cartItem);
-                    orderItem.setOrder(finalOrder);
-                    Book book = cartItem.getBook();
-                    orderItem.setPrice(book.getPrice());
-                    orderItem.setQuantity(cartItem.getQuantity());
-                    return orderItem;
-                })
-                .collect(Collectors.toSet());
+        ShoppingCart cartFromDB = getCartFromDB(userId);
+        Set<OrderItem> orderItems = moveOrderItemsFromShoppingCart(order, cartFromDB);
         order.setOrderItems(orderItems);
 
         BigDecimal total = orderItems.stream()
@@ -81,9 +69,6 @@ public class OrderServiceImpl implements OrderService {
     public List<OrderDto> findAll(Long userId, Pageable pageable) {
         List<Order> orders = orderRepository.findAllByUserId(userId, pageable);
         return orderMapper.toDto(orders);
-//        return orderRepository.findAllByUserId(userId, pageable).stream()
-//                .map(orderMapper::toDto)
-//                .toList();
     }
 
     @Override
@@ -91,9 +76,6 @@ public class OrderServiceImpl implements OrderService {
         Order orderFromDb = getOrderFromDbByUserIdAndOrderId(userId, orderId);
         Set<OrderItem> orderItems = orderFromDb.getOrderItems();
         return orderItemMapper.toDto(orderItems);
-//        return orderFromDb.getOrderItems().stream()
-//                .map(orderItemMapper::toDto)
-//                .toList();
     }
 
     @Override
@@ -130,5 +112,20 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.findByIdAndUserId(orderId, userId)
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Cannot find order by user id: " + userId + " and order id: " + orderId));
+    }
+
+    private Set<OrderItem> moveOrderItemsFromShoppingCart(Order order, ShoppingCart cartFromDB) {
+        final Order finalOrder = order;
+        Set<OrderItem> orderItems = cartFromDB.getCartItems().stream()
+                .map(cartItem -> {
+                    OrderItem orderItem = orderItemMapper.toOrderItemModel(cartItem);
+                    orderItem.setOrder(finalOrder);
+                    Book book = cartItem.getBook();
+                    orderItem.setPrice(book.getPrice());
+                    orderItem.setQuantity(cartItem.getQuantity());
+                    return orderItem;
+                })
+                .collect(Collectors.toSet());
+        return orderItems;
     }
 }

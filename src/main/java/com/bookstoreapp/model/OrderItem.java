@@ -17,8 +17,8 @@ import org.hibernate.annotations.SQLRestriction;
 import java.math.BigDecimal;
 
 @Entity
-@SQLRestriction("is_deleted=false")
-@SQLDelete(sql = "UPDATE books SET is_deleted = true WHERE id=?")
+@SQLRestriction("is_deleted = FALSE")
+@SQLDelete(sql = "UPDATE order_items SET is_deleted = TRUE WHERE id = ?")
 @Table(name = "order_items")
 @NoArgsConstructor
 @Getter

@@ -23,8 +23,8 @@ import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
-@SQLRestriction("is_deleted=false")
-@SQLDelete(sql = "UPDATE books SET is_deleted = true WHERE id=?")
+@SQLRestriction("is_deleted = FALSE")
+@SQLDelete(sql = "UPDATE orders SET is_deleted = TRUE WHERE id = ?")
 @Table(name = "orders")
 @NoArgsConstructor
 @Getter
