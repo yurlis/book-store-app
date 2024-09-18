@@ -27,11 +27,11 @@ public class CategoryServiceTest {
     @Mock
     private CategoryRepository categoryRepository;
 
-    @InjectMocks
-    private CategoryServiceImpl categoryService;
-
     @Mock
     private CategoryMapper categoryMapper;
+
+    @InjectMocks
+    private CategoryServiceImpl categoryService;
 
     @BeforeEach
     void setUp() {

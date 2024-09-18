@@ -36,9 +36,15 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -99,6 +105,7 @@ public class BookControllerIntegrationTest {
                 .setCategoriesIds(requestDto.getCategories());
 
         String jsonRequest = objectMapper.writeValueAsString(requestDto);
+
         // When
         MvcResult result = mockMvc.perform(
                         post("/books")
@@ -108,9 +115,9 @@ public class BookControllerIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andReturn();
+        BookDto actual = objectMapper.readValue(result.getResponse().getContentAsString(), BookDto.class);
 
         // Then
-        BookDto actual = objectMapper.readValue(result.getResponse().getContentAsString(), BookDto.class);
         assertNotNull(actual);
         assertNotNull(actual.getId());
         EqualsBuilder.reflectionEquals(expected, actual, "id");
@@ -180,38 +187,10 @@ public class BookControllerIntegrationTest {
         int page = 0;
         int size = 10;
 
-        BookDto[] expectedBooks = new BookDto[3];
-        expectedBooks[0] = new BookDto()
-                .setId(1L)
-                .setTitle("Test Book Title 1")
-                .setAuthor("Test Book Author 1")
-                .setIsbn("5678901234")
-                .setPrice(new BigDecimal(101))
-                .setDescription("Test Book Description 1")
-                .setCoverImage("cover1.jpg")
-                .setCategoriesIds(Collections.singleton(1L));
+        BookDto[] expectedBooks;
+        expectedBooks = buildExpectedBookDtosArray();
 
-        expectedBooks[1] = new BookDto()
-                .setId(2L)
-                .setTitle("Test Book Title 2")
-                .setAuthor("Test Book Author 2")
-                .setIsbn("3456789012")
-                .setPrice(new BigDecimal(102))
-                .setDescription("Test Book Description 2")
-                .setCoverImage("cover2.jpg")
-                .setCategoriesIds(Collections.singleton(1L));
-
-        expectedBooks[2] = new BookDto()
-                .setId(3L)
-                .setTitle("Test Book Title 3")
-                .setAuthor("Test Book Author 3")
-                .setIsbn("1234567890")
-                .setPrice(new BigDecimal(103))
-                .setDescription("Test Book Description 3")
-                .setCoverImage("cover3.jpg")
-                .setCategoriesIds(Collections.singleton(2L));
-
-        // Then
+        // When
         ResultActions result = mockMvc.perform(get("/books")
                         .param("page", String.valueOf(page))
                         .param("size", String.valueOf(size))
@@ -223,7 +202,7 @@ public class BookControllerIntegrationTest {
         List<BookDto> actualBooks = objectMapper.readValue(jsonResponse, new TypeReference<List<BookDto>>() {
         });
 
-        // When
+        // Then
         assertNotNull(actualBooks, "The list of books should not be null");
         assertEquals(expectedBooks.length, actualBooks.size(), "The size of the list should be equal to expected");
 
@@ -257,5 +236,39 @@ public class BookControllerIntegrationTest {
             ScriptUtils.executeSqlScript(connection,
                     new ClassPathResource("database/clean-up-data.sql"));
         }
+    }
+
+    private BookDto[] buildExpectedBookDtosArray() {
+    BookDto[] expectedBooks = new BookDto[3];
+    expectedBooks[0] = new BookDto()
+                .setId(1L)
+                .setTitle("Test Book Title 1")
+                .setAuthor("Test Book Author 1")
+                .setIsbn("5678901234")
+                .setPrice(new BigDecimal(101))
+            .setDescription("Test Book Description 1")
+                .setCoverImage("cover1.jpg")
+                .setCategoriesIds(Collections.singleton(1L));
+
+    expectedBooks[1] = new BookDto()
+                .setId(2L)
+                .setTitle("Test Book Title 2")
+                .setAuthor("Test Book Author 2")
+                .setIsbn("3456789012")
+                .setPrice(new BigDecimal(102))
+            .setDescription("Test Book Description 2")
+                .setCoverImage("cover2.jpg")
+                .setCategoriesIds(Collections.singleton(1L));
+
+    expectedBooks[2] = new BookDto()
+                .setId(3L)
+                .setTitle("Test Book Title 3")
+                .setAuthor("Test Book Author 3")
+                .setIsbn("1234567890")
+                .setPrice(new BigDecimal(103))
+            .setDescription("Test Book Description 3")
+                .setCoverImage("cover3.jpg")
+                .setCategoriesIds(Collections.singleton(2L));
+    return expectedBooks;
     }
 }

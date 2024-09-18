@@ -70,7 +70,6 @@ public class CategoryControllerIntegrationTest {
     void createCategory_ValidRequestDto_ReturnCategoryDto() throws Exception {
         // Given
         CategoryDto requestDto = new CategoryDto(null, "New Category", "New Category Description");
-
         String jsonRequest = objectMapper.writeValueAsString(requestDto);
 
         // When
@@ -81,9 +80,9 @@ public class CategoryControllerIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andReturn();
+        CategoryDto actual = objectMapper.readValue(result.getResponse().getContentAsString(), CategoryDto.class);
 
         // Then
-        CategoryDto actual = objectMapper.readValue(result.getResponse().getContentAsString(), CategoryDto.class);
         assertNotNull(actual);
         assertNotNull(actual.id());
         assertEquals(requestDto.name(), actual.name());
@@ -150,9 +149,9 @@ public class CategoryControllerIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
+        CategoryDto actual = objectMapper.readValue(result.getResponse().getContentAsString(), CategoryDto.class);
 
         // Then
-        CategoryDto actual = objectMapper.readValue(result.getResponse().getContentAsString(), CategoryDto.class);
         assertNotNull(actual);
         assertEquals(requestDto.name(), actual.name());
         assertEquals(requestDto.description(), actual.description());

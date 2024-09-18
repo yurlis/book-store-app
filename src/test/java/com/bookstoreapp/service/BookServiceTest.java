@@ -207,45 +207,56 @@ public class BookServiceTest {
     @DisplayName("Update existing book with valid request DTO should return updated book DTO")
     void updateBook_ExistingId_ValidRequestDto_ReturnsUpdatedBookDto() {
         // Given
-        Long bookId = 1L;
+        final Long BOOK_ID = 1L;
+        final String OLD_TITLE = "Old Title";
+        final String OLD_AUTHOR = "Old Author";
+        final String OLD_ISBN = "1234567890";
+        final BigDecimal OLD_PRICE = new BigDecimal("50.00");
+        final String OLD_DESCRIPTION = "Old Description";
+        final String OLD_COVER_IMAGE = "old_cover.jpg";
 
-        // Створюємо об'єкт книги, що вже існує
+        final String UPDATED_TITLE = "Updated Title";
+        final String UPDATED_AUTHOR = "Updated Author";
+        final String UPDATED_ISBN = "0987654321";
+        final BigDecimal UPDATED_PRICE = new BigDecimal("75.00");
+        final String UPDATED_DESCRIPTION = "Updated Description";
+        final String UPDATED_COVER_IMAGE = "updated_cover.jpg";
+        final Set<Long> CATEGORIES = Set.of(1L);
+
         Book existingBook = new Book()
-                .setId(bookId)
-                .setTitle("Old Title")
-                .setAuthor("Old Author")
-                .setIsbn("1234567890")
-                .setPrice(new BigDecimal("50.00"))
-                .setDescription("Old Description")
-                .setCoverImage("old_cover.jpg");
+                .setId(BOOK_ID)
+                .setTitle(OLD_TITLE)
+                .setAuthor(OLD_AUTHOR)
+                .setIsbn(OLD_ISBN)
+                .setPrice(OLD_PRICE)
+                .setDescription(OLD_DESCRIPTION)
+                .setCoverImage(OLD_COVER_IMAGE);
 
-        // Створюємо об'єкт запиту на оновлення
         CreateBookRequestDto requestDto = new CreateBookRequestDto()
-                .setTitle("Updated Title")
-                .setAuthor("Updated Author")
-                .setIsbn("0987654321")
-                .setPrice(new BigDecimal("75.00"))
-                .setDescription("Updated Description")
-                .setCoverImage("updated_cover.jpg")
-                .setCategories(Set.of(1L));  // Використовуємо ID категорій
+                .setTitle(UPDATED_TITLE)
+                .setAuthor(UPDATED_AUTHOR)
+                .setIsbn(UPDATED_ISBN)
+                .setPrice(UPDATED_PRICE)
+                .setDescription(UPDATED_DESCRIPTION)
+                .setCoverImage(UPDATED_COVER_IMAGE)
+                .setCategories(CATEGORIES);
 
         BookDto expectedUpdatedBookDto = new BookDto()
-                .setId(bookId)
-                .setTitle("Updated Title")
-                .setAuthor("Updated Author")
-                .setIsbn("0987654321")
-                .setPrice(new BigDecimal("75.00"))
-                .setDescription("Updated Description")
-                .setCoverImage("updated_cover.jpg")
-                .setCategoriesIds(Set.of(1L));
+                .setId(BOOK_ID)
+                .setTitle(UPDATED_TITLE)
+                .setAuthor(UPDATED_AUTHOR)
+                .setIsbn(UPDATED_ISBN)
+                .setPrice(UPDATED_PRICE)
+                .setDescription(UPDATED_DESCRIPTION)
+                .setCoverImage(UPDATED_COVER_IMAGE)
+                .setCategoriesIds(CATEGORIES);
 
-        // Мокування поведінки
-        when(bookRepository.findById(bookId)).thenReturn(Optional.of(existingBook));
+        when(bookRepository.findById(BOOK_ID)).thenReturn(Optional.of(existingBook));
         when(bookRepository.save(any(Book.class))).thenReturn(existingBook);
         when(bookMapper.toDto(any(Book.class))).thenReturn(expectedUpdatedBookDto);
 
         // When
-        BookDto result = bookService.update(bookId, requestDto);
+        BookDto result = bookService.update(BOOK_ID, requestDto);
 
         // Then
         assertNotNull(result, "The result should not be null");
