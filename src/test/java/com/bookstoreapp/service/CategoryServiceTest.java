@@ -23,16 +23,12 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 public class CategoryServiceTest {
-
     @Mock
     private CategoryRepository categoryRepository;
-
     @Mock
     private CategoryMapper categoryMapper;
-
     @InjectMocks
     private CategoryServiceImpl categoryService;
-
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);

@@ -11,6 +11,7 @@ import com.bookstoreapp.model.Book;
 import com.bookstoreapp.model.Order;
 import com.bookstoreapp.model.OrderItem;
 import com.bookstoreapp.model.ShoppingCart;
+import com.bookstoreapp.repository.order.OrderItemRepository;
 import com.bookstoreapp.repository.order.OrderRepository;
 import com.bookstoreapp.repository.shoppingcart.CartItemRepository;
 import com.bookstoreapp.repository.shoppingcart.ShoppingCartRepository;
@@ -35,6 +36,7 @@ public class OrderServiceImpl implements OrderService {
     private final OrderItemMapper orderItemMapper;
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
+    private final OrderItemRepository orderItemRepository;
 
     @Override
     @Transactional

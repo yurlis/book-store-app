@@ -60,10 +60,22 @@ public class Order {
     private boolean isDeleted = false;
 
     public enum Status {
-        COMPLETED,
-        PENDING,
-        DELIVERED,
-        CANCELED,
-        POSTPONED
+        PENDING("Pending"),
+        COMPLETED("Completed"),
+        DELIVERED("Delivered"),
+        RETURNED("Returned"),
+        CANCELLED("Cancelled"),
+        FAILED("Failed"),
+        ARCHIVED("Archived");
+
+        private final String displayName;
+
+        Status(String displayName) {
+            this.displayName = displayName;
+        }
+
+        public String getDisplayName() {
+            return displayName;
+        }
     }
 }

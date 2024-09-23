@@ -27,13 +27,10 @@ import static org.mockito.Mockito.*;
 public class BookServiceTest {
     @Mock
     private BookRepository bookRepository;
-
     @InjectMocks
     private BookServiceImpl bookService;
-
     @Mock
     private BookMapper bookMapper;
-
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);

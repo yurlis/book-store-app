@@ -7,9 +7,11 @@ import com.bookstoreapp.dto.shoppingcart.UpdateCartItemRequestDto;
 import com.bookstoreapp.exception.EntityNotFoundException;
 import com.bookstoreapp.mapper.CartItemMapper;
 import com.bookstoreapp.mapper.ShoppingCartMapper;
+import com.bookstoreapp.model.Book;
 import com.bookstoreapp.model.CartItem;
 import com.bookstoreapp.model.ShoppingCart;
 import com.bookstoreapp.model.User;
+import com.bookstoreapp.repository.book.BookRepository;
 import com.bookstoreapp.repository.shoppingcart.CartItemRepository;
 import com.bookstoreapp.repository.shoppingcart.ShoppingCartRepository;
 import com.bookstoreapp.repository.user.UserRepository;
@@ -19,6 +21,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import static org.junit.jupiter.api.Assertions.*;
@@ -35,6 +39,8 @@ public class ShoppingCartServiceTest {
     private ShoppingCartMapper shoppingCartMapper;
     @Mock
     private UserRepository userRepository;
+    @Mock
+    private BookRepository bookRepository;
     @InjectMocks
     private ShoppingCartServiceImpl shoppingCartService;
     private User user;
@@ -61,6 +67,7 @@ public class ShoppingCartServiceTest {
         AddCartItemRequestDto requestDto = new AddCartItemRequestDto(1L, 2);
         ShoppingCart shoppingCart = new ShoppingCart();
         shoppingCart.setUser(user);
+        shoppingCart.setCartItems(new HashSet<>());
 
         when(cartRepository.save(any(ShoppingCart.class))).thenAnswer(invocation -> {
             ShoppingCart cart = invocation.getArgument(0);
@@ -70,6 +77,10 @@ public class ShoppingCartServiceTest {
 
         when(userRepository.findById(user.getId())).thenReturn(Optional.of(user));
         when(cartRepository.findByUserId(user.getId())).thenReturn(Optional.of(shoppingCart));
+
+        when(bookRepository.findById(requestDto.bookId()))
+                .thenReturn(Optional.of(new Book()));
+
         when(itemMapper.toModel(requestDto)).thenReturn(new CartItem());
         when(itemRepository.save(any(CartItem.class))).thenAnswer(invocation -> {
             CartItem item = invocation.getArgument(0);
@@ -121,7 +132,7 @@ public class ShoppingCartServiceTest {
     @DisplayName("Update non-existing cart item should throw EntityNotFoundException")
     void updateCartItem_NonExistingId_ThrowsEntityNotFoundException() {
         // Given
-        final Long CART_ITEM_ID = 2L;
+        final Long CART_ITEM_ID = 999L;
         UpdateCartItemRequestDto requestDto = new UpdateCartItemRequestDto(5);
 
         when(itemRepository.findById(CART_ITEM_ID)).thenReturn(Optional.empty());

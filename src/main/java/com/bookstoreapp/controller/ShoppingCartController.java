@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "BookStore. Shopping Cart management", description = "Endpoints for managing Shopping Carts in BookStore")
@@ -31,6 +33,7 @@ public class ShoppingCartController {
     @PostMapping
     @PreAuthorize("hasRole('ROLE_USER')")
     @Operation(summary = "Add book to the shopping cart", description = "Add a book to user's shopping cart")
+    @ResponseStatus(HttpStatus.CREATED)
     public ShoppingCartDto addBook(Authentication authentication,
                                    @RequestBody @Valid AddCartItemRequestDto requestDto) {
         User user = (User) authentication.getPrincipal();
