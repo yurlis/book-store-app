@@ -93,7 +93,7 @@ public class BookServiceTest {
 
     @Test
     @DisplayName("Retrieve book by existing ID should return the correct book details")
-    void findBookById_ExistingId_ReturnsBookDto() {
+    void findById_ExistingId_ReturnsBookDto() {
         // Given
         Long bookId = 3L;
 
@@ -140,7 +140,7 @@ public class BookServiceTest {
 
     @Test
     @DisplayName("Find book by non-existing ID should throw Not Found exception")
-    void findBookById_NotFoundId_ShouldThrowNotFoundException() {
+    void findById_NotFoundId_ShouldThrowNotFoundException() {
         // Given
         Long nonExistentBookId = 999L;
         when(bookRepository.findById(nonExistentBookId)).thenReturn(Optional.empty());
@@ -152,7 +152,7 @@ public class BookServiceTest {
 
     @Test
     @DisplayName("Retrieve all books with pagination should return list of book DTOs")
-    void findAllBooks_WithPagination_ShouldReturnListOfBookDtos() {
+    void findAll_WithPagination_ShouldReturnListOfBookDtos() {
         // Given
         Pageable pageable = Pageable.unpaged();
 
@@ -202,7 +202,7 @@ public class BookServiceTest {
 
     @Test
     @DisplayName("Update existing book with valid request DTO should return updated book DTO")
-    void updateBook_ExistingId_ValidRequestDto_ReturnsUpdatedBookDto() {
+    void update_ExistingId_ValidRequestDto_ReturnsUpdatedBookDto() {
         // Given
         final Long BOOK_ID = 1L;
         final String OLD_TITLE = "Old Title";

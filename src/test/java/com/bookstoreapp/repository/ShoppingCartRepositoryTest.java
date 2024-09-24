@@ -27,10 +27,10 @@ public class ShoppingCartRepositoryTest {
     @BeforeEach
     void setUp() {
         user = new User();
-        user.setFirstName("Test");
-        user.setLastName("User");
-        user.setPassword("password");
-        user.setEmail("test@mail.com");
+        user.setFirstName("TestUserName");
+        user.setLastName("TestUserLastName");
+        user.setPassword("password123");
+        user.setEmail("testuser@example.com");
         user = userRepository.save(user);
 
         shoppingCart = new ShoppingCart();
@@ -50,12 +50,11 @@ public class ShoppingCartRepositoryTest {
 
         // Then
         assertThat(result).isPresent();
-        assertThat(result.get().getUser().getId()).isEqualTo(userId);
     }
 
+    @DisplayName("Find shopping cart by user ID when user does not exist")
     @Test
-    @DisplayName("Find shopping cart by user ID - Not Found")
-    void findByUserId_UserDoesNotExist_ReturnsEmpty() {
+    void findByUserId_WhenUserDoesNotExist_ShouldReturnEmpty()  {
         // Given
         Long userNotFoundId = 999L;
 

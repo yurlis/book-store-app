@@ -60,16 +60,16 @@ public class CategoryControllerIntegrationTest {
         try (Connection connection = dataSource.getConnection()) {
             connection.setAutoCommit(true);
             ScriptUtils.executeSqlScript(connection,
-                    new ClassPathResource("database/categories/insert-categories.sql"));
+                    new ClassPathResource("database/categories/add-categories-data.sql"));
         }
     }
 
     @Test
     @DisplayName("Create category with valid data")
     @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
-    void createCategory_ValidRequestDto_ReturnCategoryDto() throws Exception {
+    void createCategory_WhenValidRequest_ShouldReturnCategoryDto() throws Exception {
         // Given
-        CategoryDto requestDto = new CategoryDto(null, "New Category", "New Category Description");
+        CategoryDto requestDto = new CategoryDto(5L, "New Category", "New Category Description");
         String jsonRequest = objectMapper.writeValueAsString(requestDto);
 
         // When
@@ -92,7 +92,7 @@ public class CategoryControllerIntegrationTest {
     @Test
     @DisplayName("Get all categories with pagination as user")
     @WithMockUser(username = "user", authorities = {"ROLE_USER"})
-    void getAllCategories_WithPagination_ShouldReturnCategoryList() throws Exception {
+    void getAll_WithPaginationAsUser_ShouldReturnCategoryList() throws Exception {
         // Given
         int page = 0;
         int size = 10;
@@ -116,7 +116,7 @@ public class CategoryControllerIntegrationTest {
     @Test
     @DisplayName("Get category by ID as user")
     @WithMockUser(username = "user", authorities = {"ROLE_USER"})
-    void getCategoryById_ValidId_ShouldReturnCategoryDto() throws Exception {
+    void getCategoryById_WhenValidId_ShouldReturnCategoryDto() throws Exception {
         // Given
         Long categoryId = 1L;
 
@@ -132,9 +132,9 @@ public class CategoryControllerIntegrationTest {
     }
 
     @Test
-    @DisplayName("Update category as admin")
+    @DisplayName("Update category with valid data as admin")
     @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
-    void updateCategory_ValidRequestDto_ShouldReturnUpdatedCategory() throws Exception {
+    void updateCategory_WhenValidRequest_ShouldReturnUpdatedCategory() throws Exception {
         // Given
         Long categoryId = 1L;
         CategoryDto requestDto = new CategoryDto(categoryId, "Updated Category Name", "Updated Description");
@@ -158,9 +158,9 @@ public class CategoryControllerIntegrationTest {
     }
 
     @Test
-    @DisplayName("Delete category as admin")
+    @DisplayName("Delete category with valid ID as admin")
     @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
-    void deleteCategory_ValidId_ShouldReturnNoContent() throws Exception {
+    void deleteCategory_WhenValidId_ShouldReturnNoContent() throws Exception {
         // Given
         Long categoryIdToDelete = 1L;
 
@@ -188,7 +188,7 @@ public class CategoryControllerIntegrationTest {
     static void teardown(DataSource dataSource) {
         try (Connection connection = dataSource.getConnection()) {
             connection.setAutoCommit(true);
-            ScriptUtils.executeSqlScript(connection, new ClassPathResource("database/clean-up-data.sql"));
+            ScriptUtils.executeSqlScript(connection, new ClassPathResource("database/categories/delete-categories-data.sql"));
         }
     }
 }

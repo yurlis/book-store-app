@@ -73,7 +73,7 @@ class OrderControllerIntegrationTest {
     void setUp(@Autowired DataSource dataSource) throws SQLException {
         user = new User();
         user.setId(1L);
-        user.setEmail("testuser@test.com");
+        user.setEmail("testuser1@test.com");
 
         authentication = getAuthorisation(user);
         SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -83,39 +83,17 @@ class OrderControllerIntegrationTest {
             connection.setAutoCommit(true);
             ScriptUtils.executeSqlScript(
                     connection,
-                    new ClassPathResource("database/order/controller"
-                            + "/add-data.sql")
-            );
-        }
-    }
-
-    @AfterEach
-    void tearDown(@Autowired DataSource dataSource) {
-        teardown(dataSource);
-    }
-
-    @AfterAll
-    static void afterAll(@Autowired DataSource dataSource) {
-        teardown(dataSource);
-    }
-
-    @SneakyThrows
-    static void teardown(DataSource dataSource) {
-        try (Connection connection = dataSource.getConnection()) {
-            connection.setAutoCommit(true);
-            ScriptUtils.executeSqlScript(
-                    connection,
-                    new ClassPathResource("database/order/controller"
-                            + "/delete-data.sql")
+                    new ClassPathResource("database/orders/controller"
+                            + "/add-orders-data.sql")
             );
         }
     }
 
     @Test
-    @DisplayName("Create an order - Valid PlaceOrderRequestDto should return OrderDto")
-    void createOrder_ValidRequestDto_ReturnsOrderDto() throws Exception {
+    @DisplayName("Create order with valid request")
+    void placeOrder_WhenValidRequest_ShouldReturnOrderDto() throws Exception {
         // given
-        PlaceOrderRequestDto requestDto = new PlaceOrderRequestDto("test address");
+        PlaceOrderRequestDto requestDto = new PlaceOrderRequestDto("shipping test address");
 
         objectMapper.registerModule(new JavaTimeModule());
         objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
@@ -144,8 +122,8 @@ class OrderControllerIntegrationTest {
     }
 
     @Test
-    @DisplayName("Get order history - Valid request should return list of OrderDto")
-    void getOrderHistory_ValidUser_ReturnsOrderHistory() throws Exception {
+    @DisplayName("Get order history for valid user")
+    void getAllOrders_WhenValidUser_ShouldReturnOrderHistory() throws Exception {
         // given
         OrderDto expectedOrder = getOrderDtoByUser(user);
         List<OrderDto> expectedResponseList = List.of(expectedOrder);
@@ -185,11 +163,11 @@ class OrderControllerIntegrationTest {
         Set<OrderItemDto> orderItems = Set.of(orderItemDto1, orderItemDto2);
 
         return new OrderDto(
-                1L,
+                2L,
                 user.getId(),
                 orderItems,
                 LocalDateTime.now(),
-                BigDecimal.valueOf(1799.66),
+                BigDecimal.valueOf(1800.00),
                 Order.Status.PENDING
         );
     }
@@ -199,5 +177,28 @@ class OrderControllerIntegrationTest {
         authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
         return new UsernamePasswordAuthenticationToken(
                 user, "password", authorities);
+    }
+
+
+    @AfterEach
+    void tearDown(@Autowired DataSource dataSource) {
+        teardown(dataSource);
+    }
+
+    @AfterAll
+    static void afterAll(@Autowired DataSource dataSource) {
+        teardown(dataSource);
+    }
+
+    @SneakyThrows
+    static void teardown(DataSource dataSource) {
+        try (Connection connection = dataSource.getConnection()) {
+            connection.setAutoCommit(true);
+            ScriptUtils.executeSqlScript(
+                    connection,
+                    new ClassPathResource("database/orders/controller"
+                            + "/delete-orders-data.sql")
+            );
+        }
     }
 }

@@ -92,8 +92,8 @@ public class ShoppingCartControllerTest {
     }
 
     @Test
-    @DisplayName("Add book to the shopping cart - Valid request")
-    void addBookToShoppingCart_ValidRequestDto_ReturnsShoppingCartDto() throws Exception {
+    @DisplayName("Add book to shopping cart with valid request")
+    void addBook_WhenValidRequest_ShouldReturnShoppingCartDto()  throws Exception {
         // Given
         Long bookId = 1L;
         int quantity = 2;
@@ -134,8 +134,8 @@ public class ShoppingCartControllerTest {
     }
 
     @Test
-    @DisplayName("Update shopping cart item - Valid request")
-    void updateShoppingCartItem_ValidRequestDto_ReturnsUpdatedShoppingCartDto() throws Exception {
+    @DisplayName("Update shopping cart item with valid request")
+    void updateShoppingCartItems_WhenValidRequest_ShouldReturnUpdatedShoppingCartDto() throws Exception {
         // Given
         Long cartItemId = 1L;
         Long bookId = 1L;

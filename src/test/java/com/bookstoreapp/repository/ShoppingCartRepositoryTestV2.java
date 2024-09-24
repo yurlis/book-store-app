@@ -17,10 +17,10 @@ import java.util.Optional;
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Sql(scripts = {
-        "classpath:database/shopping-cart/repository/add-data.sql",
+        "classpath:database/shopping-carts/repository/add-repository-data.sql",
 }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 @Sql(scripts = {
-        "classpath:database/shopping-cart/repository/delete-data.sql"},
+        "classpath:database/shopping-carts/repository/delete-repository-data.sql"},
         executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 public class ShoppingCartRepositoryTestV2 {
 
@@ -30,11 +30,11 @@ public class ShoppingCartRepositoryTestV2 {
     @Autowired
     private UserRepository userRepository;
 
-    @DisplayName("get shopping cart by user_id")
+    @DisplayName("Find shopping cart by user ID when user exists")
     @Test
-    void findByUserId_ReturnsShoppingCart() {
+    void findByUserId_WhenUserExists_ShouldReturnShoppingCart() {
         // given
-        Long userId = 17L;
+        Long userId = 1L;
         User user = new User();
         user.setId(userId);
         user.setEmail("testuser@example.com");
@@ -54,9 +54,9 @@ public class ShoppingCartRepositoryTestV2 {
         Assertions.assertEquals(userId, shoppingCart.getUser().getId());
     }
 
-    @DisplayName("find shopping cart by user id and return empty")
+    @DisplayName("Find shopping cart by user ID when user does not exist")
     @Test
-    void findByUserId_UserDoesNotExist_ReturnsEmpty() {
+    void findByUserId_WhenUserDoesNotExist_ShouldReturnEmpty()  {
         // given
         Long userId = 999L;
 

@@ -17,20 +17,21 @@ import java.util.Set;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@Sql(scripts = {"classpath:database/users/repository/add-data.sql"},
+@Sql(scripts = {"classpath:database/users/repository/add-users-data.sql"},
         executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-@Sql(scripts = {"classpath:database/users/repository/delete-data.sql"},
+@Sql(scripts = {"classpath:database/users/repository/delete-users-data.sql"},
         executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 public class UserRepositoryTest {
     @Autowired
     UserRepository userRepository;
     @Autowired
     RoleRepository roleRepository;
+
     @Test
     @DisplayName("Find user by email when user exists, should return the user")
-    void findUserByEmail_UserExists_ReturnsUser() {
+    void findByEmail_UserExists_ReturnsUser() {
         // given
-        String email = "testuser@example.com";
+        String email = "testuser1@test.com";
 
         // when
         Optional<User> result = userRepository.findByEmail(email);
@@ -44,7 +45,7 @@ public class UserRepositoryTest {
     @DisplayName("Find user by ID when user exists, should return the user")
     void findById_UserExists_ReturnsUser() {
         // given
-        Long userId = 17L;
+        Long userId = 1L;
 
         // when
         Optional<User> result = userRepository.findById(userId);
@@ -56,9 +57,9 @@ public class UserRepositoryTest {
 
     @Test
     @DisplayName("Find user by ID when user does not exist, should return empty")
-    void findById_UserDoesNotExist_ReturnsEmpty() {
+    void findByUserId_WhenUserDoesNotExist_ShouldReturnEmpty()  {
         // given
-        Long userId = 100L;
+        Long userId = 999L;
 
         // when
         Optional<User> result = userRepository.findById(userId);
@@ -69,9 +70,9 @@ public class UserRepositoryTest {
 
     @Test
     @DisplayName("Find roles by username when user exists, should return a set of roles")
-    void findRolesByUsername_UserExists_ReturnsSetOfRoles() {
+    void findRolesByUsername_UserExists_ReturnsSetOfRoles()  {
         // given
-        String email = "testuser@example.com";
+        String email = "testuser1@test.com";
         Set<Role> expectedRoles = Set.of(
                 roleRepository.getRoleByRoleType(Role.RoleType.ROLE_USER),
                 roleRepository.getRoleByRoleType(Role.RoleType.ROLE_ADMIN)

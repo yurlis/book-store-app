@@ -9,7 +9,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -74,7 +73,7 @@ public class ShoppingCartСontrollerIntegrationTest {
 
         user = new User();
         user.setId(1L);
-        user.setEmail("testuser@test.com");
+        user.setEmail("testuser1@test.com");
 
         authentication = getAuthorisation(user);
         SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -82,13 +81,13 @@ public class ShoppingCartСontrollerIntegrationTest {
         try (Connection connection = dataSource.getConnection()) {
             connection.setAutoCommit(true);
             ScriptUtils.executeSqlScript(connection,
-                    new ClassPathResource("database/shopping-cart/controller/add-data.sql"));
+                    new ClassPathResource("database/shopping-carts/controller/add-shopping-carts-data.sql"));
         }
     }
 
     @Test
-    @DisplayName("Add item to shopping cart")
-    void addItemToShoppingCart_ValidRequest_ReturnsCartItemDto() throws Exception {
+    @DisplayName("Add item to shopping cart when valid request")
+    void addBook_WhenValidRequest_ShouldReturnCartItemDto() throws Exception {
         // Given
         AddCartItemRequestDto requestDto = new AddCartItemRequestDto(3L, 2);
         String jsonRequest = objectMapper.writeValueAsString(requestDto);
@@ -125,8 +124,8 @@ public class ShoppingCartСontrollerIntegrationTest {
     }
 
     @Test
-    @DisplayName("Delete item from shopping cart by ID")
-    void deleteItemFromCart_ExistingId_ReturnNoContent() throws Exception {
+    @DisplayName("Delete item from cart when existing ID")
+    void deleteItems_WhenExistingId_ShouldReturnNoContent() throws Exception {
         // Given
         Long cartItemIdToDelete = 1L;
 
@@ -144,7 +143,7 @@ public class ShoppingCartСontrollerIntegrationTest {
 
     @Test
     @DisplayName("Get shopping cart as user")
-    void getShoppingCart_ReturnShoppingCartResponseDto() throws Exception {
+    void getShoppingCart_WhenCalled_ShouldReturnShoppingCartResponseDto() throws Exception {
         // Given
 
         // When
@@ -174,7 +173,7 @@ public class ShoppingCartСontrollerIntegrationTest {
         try (Connection connection = dataSource.getConnection()) {
             connection.setAutoCommit(true);
             ScriptUtils.executeSqlScript(connection,
-                    new ClassPathResource("database/shopping-cart/controller/delete-data.sql"));
+                    new ClassPathResource("database/shopping-carts/controller/delete-shopping-carts-data.sql"));
         }
     }
 

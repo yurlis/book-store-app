@@ -62,7 +62,7 @@ public class ShoppingCartServiceTest {
 
     @Test
     @DisplayName("Add a cart item with valid request DTO should return updated shopping cart DTO")
-    void addItemToShoppingCart_ValidRequest_ReturnUpdatedCart() {
+    void addBookToShoppingCart_ValidRequest_ReturnUpdatedCart() {
         // Given
         AddCartItemRequestDto requestDto = new AddCartItemRequestDto(1L, 2);
         ShoppingCart shoppingCart = new ShoppingCart();
@@ -102,7 +102,7 @@ public class ShoppingCartServiceTest {
 
     @Test
     @DisplayName("Update existing cart item with valid request DTO should return updated shopping cart DTO")
-    void updateCartItem_ExistingIdValidRequestDto_ReturnsUpdatedShoppingCartDto() {
+    void update_ExistingIdValidRequestDto_ReturnsUpdatedShoppingCartDto() {
         // Given
         UpdateCartItemRequestDto requestDto = new UpdateCartItemRequestDto(5);
         CartItem existingCartItem = new CartItem();
@@ -130,7 +130,7 @@ public class ShoppingCartServiceTest {
 
     @Test
     @DisplayName("Update non-existing cart item should throw EntityNotFoundException")
-    void updateCartItem_NonExistingId_ThrowsEntityNotFoundException() {
+    void update_NonExistingId_ThrowsEntityNotFoundException() {
         // Given
         final Long CART_ITEM_ID = 999L;
         UpdateCartItemRequestDto requestDto = new UpdateCartItemRequestDto(5);
@@ -140,5 +140,4 @@ public class ShoppingCartServiceTest {
         // When & Then
         assertThrows(EntityNotFoundException.class, () -> shoppingCartService.update(user.getId(), CART_ITEM_ID, requestDto), "Expected EntityNotFoundException to be thrown");
     }
-
 }
