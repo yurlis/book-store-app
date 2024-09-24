@@ -41,15 +41,18 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
                 .findByShoppingCartIdAndBookId(cartFromDB.getId(), requestDto.bookId());
 
         if (cartItem.isPresent()) {
-            BookAlreadyExistsException.supplier("Book already exists in the cart");
+            CartItem existingItem = cartItem.get();
+            int updatedQuantity = existingItem.getQuantity() + requestDto.quantity();
+            UpdateCartItemRequestDto updateRequestDto = new UpdateCartItemRequestDto(updatedQuantity);
+            this.update(userId, existingItem.getId(), updateRequestDto);
         } else {
             CartItem requestedItemToAdd = itemMapper.toModel(requestDto);
             requestedItemToAdd.setShoppingCart(cartFromDB);
             cartFromDB.getCartItems().add(requestedItemToAdd);
             itemRepository.save(requestedItemToAdd);
         }
-
-        return shoppingCartMapper.toDto(cartFromDB);
+        ShoppingCart updatedCart = getCartFromDB(userId);
+        return shoppingCartMapper.toDto(updatedCart);
     }
 
     @Override

@@ -50,7 +50,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
-public class ShoppingCartСontrollerIntegrationTest {
+public class ShoppingCartControllerIntegrationTest {
     protected static MockMvc mockMvc;
     @Autowired
     private ObjectMapper objectMapper;
@@ -121,6 +121,43 @@ public class ShoppingCartСontrollerIntegrationTest {
         }
 
         assertTrue(bookFound, "The book with ID " + requestDto.bookId() + " not found in the cart");
+    }
+
+    @Test
+    @DisplayName("Add existing item to shopping cart should update quantity")
+    void addBook_WhenBookAlreadyInCart_ShouldUpdateQuantity() throws Exception {
+        // Given
+        AddCartItemRequestDto requestDto = new AddCartItemRequestDto(2L, 2);
+        String jsonRequest = objectMapper.writeValueAsString(requestDto);
+
+        // When
+        MvcResult result = mockMvc.perform(
+                        post("/cart")
+                                .with(authentication(authentication))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(jsonRequest)
+                )
+                .andDo(print())
+                .andExpect(status().isCreated())
+                .andReturn();
+
+        ShoppingCartDto actual = objectMapper.readValue(result.getResponse().getContentAsString(),
+                ShoppingCartDto.class);
+
+        // Then
+        assertNotNull(actual);
+
+        boolean bookFound = false;
+
+        for (CartItemDto item : actual.cartItems()) {
+            if (item.bookId().equals(requestDto.bookId())) {
+                assertEquals(6, item.quantity(), "The quantity of the item was not updated correctly.");
+                bookFound = true;
+                break;
+            }
+        }
+
+        assertTrue(bookFound, "The book with ID " + requestDto.bookId() + " was not found in the cart");
     }
 
     @Test

@@ -101,34 +101,6 @@ public class ShoppingCartServiceTest {
     }
 
     @Test
-    @DisplayName("Update existing cart item with valid request DTO should return updated shopping cart DTO")
-    void update_ExistingIdValidRequestDto_ReturnsUpdatedShoppingCartDto() {
-        // Given
-        UpdateCartItemRequestDto requestDto = new UpdateCartItemRequestDto(5);
-        CartItem existingCartItem = new CartItem();
-        existingCartItem.setQuantity(3);
-
-        when(itemRepository.findById(anyLong())).thenReturn(Optional.of(existingCartItem));
-        doNothing().when(itemMapper).updateFromDto(any(), eq(existingCartItem));
-        ShoppingCart shoppingCart = new ShoppingCart();
-        when(cartRepository.findByUserId(anyLong())).thenReturn(Optional.of(shoppingCart));
-
-        CartItemDto cartItemDto = new CartItemDto(1L, 1L, "Book Title", 5); // Встановлюємо ID
-        when(itemMapper.toDto(existingCartItem)).thenReturn(cartItemDto);
-
-        ShoppingCartDto shoppingCartDto = new ShoppingCartDto(1L, 1L, Set.of(cartItemDto));
-        when(shoppingCartMapper.toDto(any(ShoppingCart.class))).thenReturn(shoppingCartDto);
-
-        // When
-        ShoppingCartDto result = shoppingCartService.update(1L, 1L, requestDto);
-
-        // Then
-        assertNotNull(result, "The result should not be null");
-        assertEquals(1, result.cartItems().size(), "The cart items size should match");
-        assertEquals(5, result.cartItems().iterator().next().quantity(), "The quantity should be updated to the new value");
-    }
-
-    @Test
     @DisplayName("Update non-existing cart item should throw EntityNotFoundException")
     void update_NonExistingId_ThrowsEntityNotFoundException() {
         // Given

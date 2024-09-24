@@ -237,36 +237,36 @@ public class BookControllerIntegrationTest {
     }
 
     private BookDto[] buildExpectedBookDtosArray() {
-    BookDto[] expectedBooks = new BookDto[3];
-    expectedBooks[0] = new BookDto()
+        BookDto[] expectedBooks = new BookDto[3];
+        expectedBooks[0] = new BookDto()
                 .setId(1L)
                 .setTitle("Test Book Title 1")
                 .setAuthor("Test Book Author 1")
                 .setIsbn("5678901234")
                 .setPrice(new BigDecimal(100.00))
-            .setDescription("Test Book Description 1")
+                .setDescription("Test Book Description 1")
                 .setCoverImage("Test Book Cover Image URL 1")
                 .setCategoriesIds(Collections.singleton(1L));
 
-    expectedBooks[1] = new BookDto()
+        expectedBooks[1] = new BookDto()
                 .setId(2L)
                 .setTitle("Test Book Title 2")
                 .setAuthor("Test Book Author 2")
                 .setIsbn("3456789012")
                 .setPrice(new BigDecimal(200.00))
-            .setDescription("Test Book Description 2")
+                .setDescription("Test Book Description 2")
                 .setCoverImage("Test Book Cover Image URL 2")
                 .setCategoriesIds(Collections.singleton(1L));
 
-    expectedBooks[2] = new BookDto()
+        expectedBooks[2] = new BookDto()
                 .setId(3L)
                 .setTitle("Test Book Title 3")
                 .setAuthor("Test Book Author 3")
                 .setIsbn("1234567890")
                 .setPrice(new BigDecimal(300.00))
-            .setDescription("Test Book Description 3")
+                .setDescription("Test Book Description 3")
                 .setCoverImage("Test Book Cover Image URL 3")
                 .setCategoriesIds(Collections.singleton(2L));
-    return expectedBooks;
+        return expectedBooks;
     }
 }
