@@ -8,6 +8,4 @@ import com.bookstoreapp.model.User;
 public interface UserService {
     UserRegistrationResponseDto register(UserRegistrationRequestDto requestDto)
             throws RegistrationException;
-
-    User findByEmail(String email);
 }

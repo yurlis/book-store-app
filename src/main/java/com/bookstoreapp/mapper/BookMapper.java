@@ -34,14 +34,6 @@ public interface BookMapper {
     @Mapping(target = "categories", ignore = true)
     Book toModel(CreateBookRequestDto requestDto);
 
-//    @AfterMapping ---------- i don't know why it don't work ?????
-//    default void setCategories(@MappingTarget Book book, CreateBookRequestDto requestDto) {
-//        Set<Category> categories = requestDto.getCategories().stream()
-//                .map(Category::new)
-//                .collect(Collectors.toSet());
-//        book.setCategories(categories);
-//    }
-
     @AfterMapping
     default void setCategories(@MappingTarget Book book, CreateBookRequestDto requestDto) {
         Set<Category> categories = mapCategoriesIdsToCategories(requestDto.getCategories());

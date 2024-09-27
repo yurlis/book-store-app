@@ -106,27 +106,27 @@ class UserServiceTest {
         verify(userRepository).findByEmail(request.getEmail());
     }
 
-    @Test
-    @DisplayName("Finding user by email returns the user")
-    void findByEmail_ValidEmail_ReturnsUser() {
-        // Given
-        Role userRole = new Role();
-        userRole.setRole(Role.RoleType.ROLE_USER);
-
-        User user = new User();
-        user.setDeleted(false);
-        user.setPassword("hashedPassword");
-        user.setEmail("test@test.com");
-        user.setFirstName("TestName");
-        user.setLastName("TestLastName");
-        user.setRoles(Set.of(userRole));
-
-        when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
-
-        // When
-        User result = userService.findByEmail(user.getEmail());
-
-        // Then
-        Assertions.assertEquals(user, result);
-    }
+//    @Test
+//    @DisplayName("Finding user by email returns the user")
+//    void findByEmail_ValidEmail_ReturnsUser() {
+//        // Given
+//        Role userRole = new Role();
+//        userRole.setRole(Role.RoleType.ROLE_USER);
+//
+//        User user = new User();
+//        user.setDeleted(false);
+//        user.setPassword("hashedPassword");
+//        user.setEmail("test@test.com");
+//        user.setFirstName("TestName");
+//        user.setLastName("TestLastName");
+//        user.setRoles(Set.of(userRole));
+//
+//        when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
+//
+//        // When
+//        User result = userService.findByEmail(user.getEmail());
+//
+//        // Then
+//        Assertions.assertEquals(user, result);
+//    }
 }

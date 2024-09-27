@@ -5,6 +5,7 @@ import com.bookstoreapp.dto.category.CategoryDto;
 import com.bookstoreapp.service.BookService;
 import com.bookstoreapp.service.CategoryService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -28,13 +29,14 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(value = "/categories")
+@SecurityRequirement(name = "bearerAuth")
 public class CategoryController {
     private final CategoryService categoryService;
     private final BookService bookService;
 
     @PostMapping
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @Operation(summary = "Create a new category", description = "Add a new category to the BookStore")
+    @Operation(summary = "Create a new category (ADMIN)", description = "Add a new category to the BookStore")
     @ResponseStatus(HttpStatus.CREATED)
     public CategoryDto createCategory(@RequestBody CategoryDto categoryDto) {
         return categoryService.save(categoryDto);
@@ -42,7 +44,7 @@ public class CategoryController {
 
     @GetMapping
     @PreAuthorize("hasRole('ROLE_USER')")
-    @Operation(summary = "Get all categories",
+    @Operation(summary = "Get all categories (USER)",
             description = "Get a list of all categories with optional pagination")
     public List<CategoryDto> getAll(@ParameterObject Pageable pageable) {
         return categoryService.findAll(pageable);
@@ -50,7 +52,7 @@ public class CategoryController {
 
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('ROLE_USER')")
-    @Operation(summary = "Get category by Id",
+    @Operation(summary = "Get category by Id (USER)",
             description = "Get a specific category by unique Id")
     public CategoryDto getCategoryById(@PathVariable Long id) {
         return categoryService.getById(id);
@@ -58,7 +60,7 @@ public class CategoryController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @Operation(summary = "Update a category",
+    @Operation(summary = "Update a category (ADMIN)",
             description = "Update an existing category by specifying parameters")
     public CategoryDto updateCategory(@PathVariable(name = "id") Long id,
                                   @RequestBody @Valid CategoryDto categoryDto) {
@@ -68,7 +70,7 @@ public class CategoryController {
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @Operation(summary = "Delete a category",
+    @Operation(summary = "Delete a category (ADMIN)",
             description = "Delete a specific category from the BookStore by unique Id")
     public void deleteCategory(@PathVariable Long id) {
         categoryService.deleteById(id);
@@ -76,7 +78,7 @@ public class CategoryController {
 
     @GetMapping("/{id}/books")
     @PreAuthorize("hasRole('ROLE_USER')")
-    @Operation(summary = "Search books by category Id",
+    @Operation(summary = "Search books by category Id (USER)",
             description = "Get books associated with a specific category by id")
     public List<BookDtoWithoutCategoryIds> getBooksByCategoryId(@PathVariable Long id,
                                                                 @ParameterObject Pageable pageable) {

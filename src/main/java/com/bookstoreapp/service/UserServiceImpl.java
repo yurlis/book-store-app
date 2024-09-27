@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -34,21 +35,12 @@ public class UserServiceImpl implements UserService {
         }
         User savedUser = userRepository.save(userMapper.toUserModel(requestDto));
 
-        Role roleFromDb = roleRepository.findRoleByRole(Role.RoleType.ROLE_USER)
-                .orElseThrow(() -> new EntityNotFoundException(
-                        "Cannot find role 'ROLE_USER'"));
+        Optional<Role> roleFromDb = roleRepository.findRoleByRole(Role.RoleType.ROLE_USER);
 
-        Set<Role> userRoles = savedUser.getRoles();
-        userRoles = new HashSet<>();
-        userRoles.add(roleFromDb);
+        Set<Role> userRoles = new HashSet<>();
+        userRoles.add(roleFromDb.get());
         savedUser.setRoles(userRoles);
 
         return userMapper.toRegistrationResponseDto(savedUser);
-    }
-
-    @Override
-    public User findByEmail(String email) {
-        return userRepository.findByEmail(email).orElseThrow(()
-                -> new EntityNotFoundException("Can`t find user by email " + email));
     }
 }

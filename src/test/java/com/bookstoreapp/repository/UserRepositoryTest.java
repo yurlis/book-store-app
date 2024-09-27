@@ -74,8 +74,8 @@ public class UserRepositoryTest {
         // given
         String email = "testuser1@test.com";
         Set<Role> expectedRoles = Set.of(
-                roleRepository.getRoleByRoleType(Role.RoleType.ROLE_USER),
-                roleRepository.getRoleByRoleType(Role.RoleType.ROLE_ADMIN)
+                roleRepository.findRoleByRole(Role.RoleType.ROLE_USER).get(),
+                roleRepository.findRoleByRole(Role.RoleType.ROLE_ADMIN).get()
         );
 
         // when
