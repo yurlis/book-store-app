@@ -4,64 +4,66 @@ import com.bookstoreapp.model.ShoppingCart;
 import com.bookstoreapp.model.User;
 import com.bookstoreapp.repository.shoppingcart.ShoppingCartRepository;
 import com.bookstoreapp.repository.user.UserRepository;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.context.jdbc.Sql;
+
 import java.util.Optional;
-import java.util.Set;
-import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@Sql(scripts = {
+        "classpath:database/shopping-carts/repository/add-repository-data.sql",
+}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@Sql(scripts = {
+        "classpath:database/shopping-carts/repository/delete-repository-data.sql"},
+        executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 public class ShoppingCartRepositoryTest {
+
     @Autowired
     private ShoppingCartRepository shoppingCartRepository;
+
     @Autowired
     private UserRepository userRepository;
-    private ShoppingCart shoppingCart;
-    private User user;
 
-    @BeforeEach
-    void setUp() {
-        user = new User();
+    @DisplayName("Find shopping cart by user ID when user exists")
+    @Test
+    void findByUserId_WhenUserExists_ShouldReturnShoppingCart() {
+        // given
+        Long userId = 1L;
+        User user = new User();
+        user.setId(userId);
+        user.setEmail("testuser@example.com");
         user.setFirstName("TestUserName");
         user.setLastName("TestUserLastName");
         user.setPassword("password123");
-        user.setEmail("testuser@example.com");
-        user = userRepository.save(user);
+        user.setDeleted(false);
+        userRepository.save(user);
 
-        shoppingCart = new ShoppingCart();
-        shoppingCart.setUser(user);
-        shoppingCart.setCartItems(Set.of());
-        shoppingCartRepository.save(shoppingCart);
-    }
-
-    @Test
-    @DisplayName("Find shopping cart by user ID - Found")
-    void findByUserId_UserExists_ReturnsShoppingCart() {
-        // Given
-        Long userId = user.getId();
-
-        // When
+        // when
         Optional<ShoppingCart> result = shoppingCartRepository.findByUserId(userId);
 
-        // Then
-        assertThat(result).isPresent();
+        // then
+        Assertions.assertTrue(result.isPresent());
+        ShoppingCart shoppingCart = result.get();
+        Assertions.assertNotNull(shoppingCart);
+        Assertions.assertEquals(userId, shoppingCart.getUser().getId());
     }
 
     @DisplayName("Find shopping cart by user ID when user does not exist")
     @Test
     void findByUserId_WhenUserDoesNotExist_ShouldReturnEmpty()  {
-        // Given
-        Long userNotFoundId = 999L;
+        // given
+        Long userId = 999L;
 
-        // When
-        Optional<ShoppingCart> result = shoppingCartRepository.findByUserId(userNotFoundId);
+        // when
+        Optional<ShoppingCart> result = shoppingCartRepository.findByUserId(userId);
 
-        // Then
-        assertThat(result).isNotPresent();
+        // then
+        Assertions.assertTrue(result.isEmpty());
     }
 }
