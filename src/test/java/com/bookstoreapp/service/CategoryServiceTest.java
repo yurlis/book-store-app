@@ -1,6 +1,7 @@
 package com.bookstoreapp.service;
 
 import com.bookstoreapp.dto.category.CategoryDto;
+import com.bookstoreapp.dto.category.CategoryRequestDto;
 import com.bookstoreapp.exception.EntityNotFoundException;
 import com.bookstoreapp.mapper.CategoryMapper;
 import com.bookstoreapp.model.Category;
@@ -39,7 +40,7 @@ public class CategoryServiceTest {
     void save_ValidCategoryDto_ReturnsCreatedCategoryDto() {
         // Given
         Long categoryId = 1L;
-        CategoryDto requestDto = new CategoryDto(categoryId, "Test Category", "Description");
+        CategoryRequestDto requestDto = new CategoryRequestDto("Test Category", "Description");
 
         Category category = new Category()
                 .setId(categoryId)
@@ -139,7 +140,7 @@ public class CategoryServiceTest {
                 .setName("Old Category Name")
                 .setDescription("Old Description");
 
-        CategoryDto requestDto = new CategoryDto(categoryId, "Updated Category Name", "Updated Description");
+        CategoryRequestDto requestDto = new CategoryRequestDto( "Updated Category Name", "Updated Description");
 
         CategoryDto expectedUpdatedCategoryDto = new CategoryDto(categoryId, "Updated Category Name", "Updated Description");
 

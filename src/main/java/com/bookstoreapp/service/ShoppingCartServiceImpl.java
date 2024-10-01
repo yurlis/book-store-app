@@ -3,22 +3,22 @@ package com.bookstoreapp.service;
 import com.bookstoreapp.dto.shoppingcart.AddCartItemRequestDto;
 import com.bookstoreapp.dto.shoppingcart.ShoppingCartDto;
 import com.bookstoreapp.dto.shoppingcart.UpdateCartItemRequestDto;
-import com.bookstoreapp.exception.BookAlreadyExistsException;
 import com.bookstoreapp.exception.EntityNotFoundException;
 import com.bookstoreapp.mapper.CartItemMapper;
 import com.bookstoreapp.mapper.ShoppingCartMapper;
 import com.bookstoreapp.model.Book;
 import com.bookstoreapp.model.CartItem;
 import com.bookstoreapp.model.ShoppingCart;
-import com.bookstoreapp.model.User;
 import com.bookstoreapp.repository.book.BookRepository;
 import com.bookstoreapp.repository.shoppingcart.CartItemRepository;
 import com.bookstoreapp.repository.shoppingcart.ShoppingCartRepository;
-import com.bookstoreapp.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -27,7 +27,6 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     private final CartItemRepository itemRepository;
     private final CartItemMapper itemMapper;
     private final ShoppingCartMapper shoppingCartMapper;
-    private final UserRepository userRepository;
     private final BookRepository bookRepository;
 
     @Override
@@ -38,7 +37,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         ShoppingCart cartFromDB = getCartFromDB(userId);
 
         Optional<CartItem> cartItem = itemRepository
-                .findByShoppingCartIdAndBookId(cartFromDB.getId(), requestDto.bookId());
+                .findByShoppingCartIdAndBookId(cartFromDB.getUser().getId(), requestDto.bookId());
 
         if (cartItem.isPresent()) {
             CartItem existingItem = cartItem.get();
@@ -83,13 +82,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     private ShoppingCart getCartFromDB(Long userId) {
         return cartRepository.findByUserId(userId)
-                .orElseGet(() -> {
-                    ShoppingCart shoppingCart = new ShoppingCart();
-                    User userFromDb = userRepository.findById(userId)
-                            .orElseThrow(() -> new EntityNotFoundException(
-                                    "User not found by user id: " + userId));
-                    shoppingCart.setUser(userFromDb);
-                    return cartRepository.save(shoppingCart);
-                });
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Cannot find ShoppingCard for user with id: " + userId));
     }
 }

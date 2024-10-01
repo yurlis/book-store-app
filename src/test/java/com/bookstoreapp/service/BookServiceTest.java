@@ -2,11 +2,13 @@ package com.bookstoreapp.service;
 
 import com.bookstoreapp.dto.book.BookDto;
 import com.bookstoreapp.dto.book.CreateBookRequestDto;
+import com.bookstoreapp.dto.book.UpdateBookRequestDto;
 import com.bookstoreapp.exception.EntityNotFoundException;
 import com.bookstoreapp.mapper.BookMapper;
 import com.bookstoreapp.model.Book;
 import com.bookstoreapp.model.Category;
 import com.bookstoreapp.repository.book.BookRepository;
+import com.bookstoreapp.repository.category.CategoryRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -27,6 +29,8 @@ import static org.mockito.Mockito.*;
 public class BookServiceTest {
     @Mock
     private BookRepository bookRepository;
+    @Mock
+    private CategoryRepository categoryRepository;
     @InjectMocks
     private BookServiceImpl bookService;
     @Mock
@@ -52,6 +56,7 @@ public class BookServiceTest {
 
         Category category = new Category();
         category.setId(categoryId);
+        category.setName("*Fiction");
 
         Book book = new Book()
                 .setTitle(requestDto.getTitle())
@@ -99,6 +104,7 @@ public class BookServiceTest {
 
         Category category = new Category();
         category.setId(1L);
+        category.setName("*Fiction");
 
         Book book = new Book()
                 .setId(bookId)
@@ -158,6 +164,7 @@ public class BookServiceTest {
 
         Category category = new Category();
         category.setId(1L);
+        category.setName("*Fiction");
 
         Book book = new Book()
                 .setTitle("Test Book")
@@ -229,7 +236,7 @@ public class BookServiceTest {
                 .setDescription(OLD_DESCRIPTION)
                 .setCoverImage(OLD_COVER_IMAGE);
 
-        CreateBookRequestDto requestDto = new CreateBookRequestDto()
+        UpdateBookRequestDto requestDto = new UpdateBookRequestDto()
                 .setTitle(UPDATED_TITLE)
                 .setAuthor(UPDATED_AUTHOR)
                 .setIsbn(UPDATED_ISBN)
@@ -248,7 +255,12 @@ public class BookServiceTest {
                 .setCoverImage(UPDATED_COVER_IMAGE)
                 .setCategoriesIds(CATEGORIES);
 
+        Category category = new Category();
+        category.setId(1L);
+        category.setName("*Fiction");
+
         when(bookRepository.findById(BOOK_ID)).thenReturn(Optional.of(existingBook));
+        when(categoryRepository.findById(1L)).thenReturn(Optional.of(category));
         when(bookRepository.save(any(Book.class))).thenReturn(existingBook);
         when(bookMapper.toDto(any(Book.class))).thenReturn(expectedUpdatedBookDto);
 

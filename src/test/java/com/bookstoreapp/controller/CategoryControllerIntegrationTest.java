@@ -1,6 +1,7 @@
 package com.bookstoreapp.controller;
 
 import com.bookstoreapp.dto.category.CategoryDto;
+import com.bookstoreapp.dto.category.CategoryRequestDto;
 import com.bookstoreapp.service.CategoryService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -69,7 +70,7 @@ public class CategoryControllerIntegrationTest {
     @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
     void createCategory_WhenValidRequest_ShouldReturnCategoryDto() throws Exception {
         // Given
-        CategoryDto requestDto = new CategoryDto(5L, "New Category", "New Category Description");
+        CategoryRequestDto requestDto = new CategoryRequestDto("New Category", "New Category Description");
         String jsonRequest = objectMapper.writeValueAsString(requestDto);
 
         // When
@@ -137,7 +138,7 @@ public class CategoryControllerIntegrationTest {
     void updateCategory_WhenValidRequest_ShouldReturnUpdatedCategory() throws Exception {
         // Given
         Long categoryId = 1L;
-        CategoryDto requestDto = new CategoryDto(categoryId, "Updated Category Name", "Updated Description");
+        CategoryRequestDto requestDto = new CategoryRequestDto( "Updated Category Name", "Updated Description");
 
         String jsonRequest = objectMapper.writeValueAsString(requestDto);
 

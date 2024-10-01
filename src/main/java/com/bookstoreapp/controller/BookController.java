@@ -3,6 +3,7 @@ package com.bookstoreapp.controller;
 import com.bookstoreapp.dto.book.BookDto;
 import com.bookstoreapp.dto.book.BookSearchParameters;
 import com.bookstoreapp.dto.book.CreateBookRequestDto;
+import com.bookstoreapp.dto.book.UpdateBookRequestDto;
 import com.bookstoreapp.service.BookService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -61,7 +62,7 @@ public class BookController {
             description = "Update an existing book by specifying parameters")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public BookDto updateBook(@PathVariable(name = "id") Long id,
-                              @RequestBody @Valid CreateBookRequestDto requestDto) {
+                              @RequestBody UpdateBookRequestDto requestDto) {
         return bookService.update(id, requestDto);
     }
 

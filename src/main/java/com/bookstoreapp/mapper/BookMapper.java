@@ -4,6 +4,7 @@ import com.bookstoreapp.config.MapperConfig;
 import com.bookstoreapp.dto.book.BookDto;
 import com.bookstoreapp.dto.book.BookDtoWithoutCategoryIds;
 import com.bookstoreapp.dto.book.CreateBookRequestDto;
+import com.bookstoreapp.dto.book.UpdateBookRequestDto;
 import com.bookstoreapp.model.Book;
 import com.bookstoreapp.model.Category;
 import org.mapstruct.AfterMapping;
@@ -50,7 +51,7 @@ public interface BookMapper {
                 .collect(Collectors.toSet());
     }
 
-    void updateFromDto(@MappingTarget Book book, CreateBookRequestDto requestDto);
+    void updateFromDto(@MappingTarget Book book, UpdateBookRequestDto requestDto);
 
     BookDtoWithoutCategoryIds toDtoWithoutCategories(Book book);
 

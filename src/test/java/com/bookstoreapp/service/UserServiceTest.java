@@ -5,8 +5,10 @@ import com.bookstoreapp.dto.user.UserRegistrationResponseDto;
 import com.bookstoreapp.exception.RegistrationException;
 import com.bookstoreapp.mapper.UserMapper;
 import com.bookstoreapp.model.Role;
+import com.bookstoreapp.model.ShoppingCart;
 import com.bookstoreapp.model.User;
 import com.bookstoreapp.repository.role.RoleRepository;
+import com.bookstoreapp.repository.shoppingcart.ShoppingCartRepository;
 import com.bookstoreapp.repository.user.UserRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -18,6 +20,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
@@ -34,6 +37,8 @@ class UserServiceTest {
     private UserRepository userRepository;
     @Mock
     private RoleRepository roleRepository;
+    @Mock
+    private ShoppingCartRepository cartRepository;
     @Mock
     private PasswordEncoder passwordEncoder;
     @InjectMocks
@@ -64,12 +69,17 @@ class UserServiceTest {
         userResponseDto.setEmail(request.getEmail());
         userResponseDto.setId(1L);
 
+        ShoppingCart shoppingCart = new ShoppingCart();
+        shoppingCart.setUser(user);
+        shoppingCart.setCartItems(new HashSet<>());
+
         when(userRepository.findByEmail(request.getEmail())).thenReturn(Optional.empty());
         when(userMapper.toUserModel(request)).thenReturn(user);
         Mockito.lenient().when(passwordEncoder.encode(any())).thenReturn("hashedPassword");
         Mockito.lenient().when(roleRepository.findRoleByRole(Role.RoleType.ROLE_USER)).thenReturn(Optional.of(userRole));
         when(userRepository.save(any(User.class))).thenReturn(user);
         Mockito.lenient().when(userMapper.toRegistrationResponseDto(user)).thenReturn(userResponseDto);
+        when(cartRepository.save(any(ShoppingCart.class))).thenReturn(shoppingCart);
 
         // When
         UserRegistrationResponseDto result = null;
