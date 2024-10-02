@@ -74,25 +74,23 @@ public class BookControllerIntegrationTest {
         try (Connection connection = dataSource.getConnection()) {
             connection.setAutoCommit(true);
             ScriptUtils.executeSqlScript(connection,
-                    new ClassPathResource("database/categories/insert-categories.sql"));
-            ScriptUtils.executeSqlScript(connection,
-                    new ClassPathResource("database/books/insert-books.sql"));
+                    new ClassPathResource("database/books/add-books-data.sql"));
         }
     }
 
     @Test
-    @DisplayName("Create book with valid data")
+    @DisplayName("Create book when valid data is provided")
     @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
-    void createBook_ValidRequestDto_ReturnBookDto() throws Exception {
+    void createBook_WhenValidRequestProvided_ShouldReturnBookDto() throws Exception {
         // Given
         Long category = 1L;
         CreateBookRequestDto requestDto = new CreateBookRequestDto()
-                .setTitle("Test Book")
-                .setAuthor("Test Book Author Name")
-                .setIsbn("1234567890123")
-                .setPrice(new BigDecimal("99.9"))
-                .setDescription("Test Book Description")
-                .setCoverImage("Test Book Cover Image URL")
+                .setTitle("Test Book Title 4")
+                .setAuthor("Test Book Author 4")
+                .setIsbn("4897984515")
+                .setPrice(new BigDecimal("400.00"))
+                .setDescription("Test Book Description 4")
+                .setCoverImage("Test Book Cover Image URL 4")
                 .setCategories(Set.of(category));
 
         BookDto expected = new BookDto()
@@ -124,9 +122,9 @@ public class BookControllerIntegrationTest {
     }
 
     @Test
-    @DisplayName("Delete book by ID as admin")
+    @DisplayName("Delete book by ID as admin when book exists")
     @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
-    void deleteBook_DeleteBookByExistId_ShouldReturnNoContent() throws Exception {
+    void deleteBook_WhenBookExists_ShouldReturnNoContent() throws Exception {
         //Given
         Long bookIdToDelete = 1L;
 
@@ -141,11 +139,11 @@ public class BookControllerIntegrationTest {
     }
 
     @Test
-    @DisplayName("Delete not existing book by ID as admin")
+    @DisplayName("Delete non-existent book by ID as admin")
     @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
-    void deleteBook_DeleteBookByNotExistingId_ShouldReturnNoContent() throws Exception {
+    void deleteBook_WhenBookDoesNotExist_ShouldReturnNoContent() throws Exception {
         // Given
-        Long notExistingBookIdToDelete = 100L;
+        Long notExistingBookIdToDelete = 999L;
 
         // When
         mockMvc.perform(delete("/books/{id}", notExistingBookIdToDelete)
@@ -160,7 +158,7 @@ public class BookControllerIntegrationTest {
     @Test
     @DisplayName("Find existing book by ID as user")
     @WithMockUser(username = "user", authorities = {"ROLE_USER"})
-    void getBookById_findBookByExistId_ShouldReturnBookDto() throws Exception {
+    void getBookById_WhenBookExists_ShouldReturnBookDto() throws Exception {
         // Given
         Long bookIdToRetrieve = 3L;
         BookDto expected = new BookDto()
@@ -180,9 +178,9 @@ public class BookControllerIntegrationTest {
     }
 
     @Test
-    @DisplayName("Get all books as user with pagination")
+    @DisplayName("Get all books with pagination as user")
     @WithMockUser(username = "user", authorities = {"ROLE_USER"})
-    void get_GetAllBooksAsUserWithPagination_ShouldReturnBookDtoList() throws Exception {
+    void getAll_WithPaginationAsUser_ShouldReturnBookList() throws Exception {
         // Given
         int page = 0;
         int size = 10;
@@ -234,41 +232,41 @@ public class BookControllerIntegrationTest {
         try (Connection connection = dataSource.getConnection()) {
             connection.setAutoCommit(true);
             ScriptUtils.executeSqlScript(connection,
-                    new ClassPathResource("database/clean-up-data.sql"));
+                    new ClassPathResource("database/books/delete-books-data.sql"));
         }
     }
 
     private BookDto[] buildExpectedBookDtosArray() {
-    BookDto[] expectedBooks = new BookDto[3];
-    expectedBooks[0] = new BookDto()
+        BookDto[] expectedBooks = new BookDto[3];
+        expectedBooks[0] = new BookDto()
                 .setId(1L)
                 .setTitle("Test Book Title 1")
                 .setAuthor("Test Book Author 1")
                 .setIsbn("5678901234")
-                .setPrice(new BigDecimal(101))
-            .setDescription("Test Book Description 1")
-                .setCoverImage("cover1.jpg")
+                .setPrice(new BigDecimal(100.00))
+                .setDescription("Test Book Description 1")
+                .setCoverImage("Test Book Cover Image URL 1")
                 .setCategoriesIds(Collections.singleton(1L));
 
-    expectedBooks[1] = new BookDto()
+        expectedBooks[1] = new BookDto()
                 .setId(2L)
                 .setTitle("Test Book Title 2")
                 .setAuthor("Test Book Author 2")
                 .setIsbn("3456789012")
-                .setPrice(new BigDecimal(102))
-            .setDescription("Test Book Description 2")
-                .setCoverImage("cover2.jpg")
+                .setPrice(new BigDecimal(200.00))
+                .setDescription("Test Book Description 2")
+                .setCoverImage("Test Book Cover Image URL 2")
                 .setCategoriesIds(Collections.singleton(1L));
 
-    expectedBooks[2] = new BookDto()
+        expectedBooks[2] = new BookDto()
                 .setId(3L)
                 .setTitle("Test Book Title 3")
                 .setAuthor("Test Book Author 3")
                 .setIsbn("1234567890")
-                .setPrice(new BigDecimal(103))
-            .setDescription("Test Book Description 3")
-                .setCoverImage("cover3.jpg")
+                .setPrice(new BigDecimal(300.00))
+                .setDescription("Test Book Description 3")
+                .setCoverImage("Test Book Cover Image URL 3")
                 .setCategoriesIds(Collections.singleton(2L));
-    return expectedBooks;
+        return expectedBooks;
     }
 }

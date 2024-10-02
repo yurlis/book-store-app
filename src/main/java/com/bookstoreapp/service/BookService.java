@@ -4,6 +4,7 @@ import com.bookstoreapp.dto.book.BookDto;
 import com.bookstoreapp.dto.book.BookDtoWithoutCategoryIds;
 import com.bookstoreapp.dto.book.BookSearchParameters;
 import com.bookstoreapp.dto.book.CreateBookRequestDto;
+import com.bookstoreapp.dto.book.UpdateBookRequestDto;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -16,7 +17,7 @@ public interface BookService {
 
     BookDto findById(Long id);
 
-    BookDto update(Long id, CreateBookRequestDto requestDto);
+    BookDto update(Long id, UpdateBookRequestDto requestDto);
 
     void deleteByID(Long id);
 

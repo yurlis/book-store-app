@@ -4,6 +4,7 @@ import com.bookstoreapp.config.MapperConfig;
 import com.bookstoreapp.dto.book.BookDto;
 import com.bookstoreapp.dto.book.BookDtoWithoutCategoryIds;
 import com.bookstoreapp.dto.book.CreateBookRequestDto;
+import com.bookstoreapp.dto.book.UpdateBookRequestDto;
 import com.bookstoreapp.model.Book;
 import com.bookstoreapp.model.Category;
 import org.mapstruct.AfterMapping;
@@ -34,14 +35,6 @@ public interface BookMapper {
     @Mapping(target = "categories", ignore = true)
     Book toModel(CreateBookRequestDto requestDto);
 
-//    @AfterMapping ---------- i don't know why it don't work ?????
-//    default void setCategories(@MappingTarget Book book, CreateBookRequestDto requestDto) {
-//        Set<Category> categories = requestDto.getCategories().stream()
-//                .map(Category::new)
-//                .collect(Collectors.toSet());
-//        book.setCategories(categories);
-//    }
-
     @AfterMapping
     default void setCategories(@MappingTarget Book book, CreateBookRequestDto requestDto) {
         Set<Category> categories = mapCategoriesIdsToCategories(requestDto.getCategories());
@@ -58,7 +51,7 @@ public interface BookMapper {
                 .collect(Collectors.toSet());
     }
 
-    void updateFromDto(@MappingTarget Book book, CreateBookRequestDto requestDto);
+    void updateFromDto(@MappingTarget Book book, UpdateBookRequestDto requestDto);
 
     BookDtoWithoutCategoryIds toDtoWithoutCategories(Book book);
 

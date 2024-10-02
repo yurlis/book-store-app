@@ -1,6 +1,7 @@
 package com.bookstoreapp.service;
 
 import com.bookstoreapp.dto.category.CategoryDto;
+import com.bookstoreapp.dto.category.CategoryRequestDto;
 import com.bookstoreapp.exception.EntityNotFoundException;
 import com.bookstoreapp.mapper.CategoryMapper;
 import com.bookstoreapp.model.Category;
@@ -23,16 +24,12 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 public class CategoryServiceTest {
-
     @Mock
     private CategoryRepository categoryRepository;
-
     @Mock
     private CategoryMapper categoryMapper;
-
     @InjectMocks
     private CategoryServiceImpl categoryService;
-
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
@@ -43,7 +40,7 @@ public class CategoryServiceTest {
     void save_ValidCategoryDto_ReturnsCreatedCategoryDto() {
         // Given
         Long categoryId = 1L;
-        CategoryDto requestDto = new CategoryDto(categoryId, "Test Category", "Description");
+        CategoryRequestDto requestDto = new CategoryRequestDto("Test Category", "Description");
 
         Category category = new Category()
                 .setId(categoryId)
@@ -68,7 +65,7 @@ public class CategoryServiceTest {
 
     @Test
     @DisplayName("Retrieve category by existing ID should return the correct category details")
-    void getCategoryById_ExistingId_ReturnsCategoryDto() {
+    void getById_ExistingId_ReturnsCategoryDto() {
         // Given
         Long categoryId = 1L;
         Category category = new Category()
@@ -93,7 +90,7 @@ public class CategoryServiceTest {
 
     @Test
     @DisplayName("Find category by non-existing ID should throw Not Found exception")
-    void getCategoryById_NotFoundId_ShouldThrowNotFoundException() {
+    void getById_NotFoundId_ShouldThrowNotFoundException() {
         // Given
         Long nonExistentCategoryId = 999L;
         when(categoryRepository.findById(nonExistentCategoryId)).thenReturn(Optional.empty());
@@ -105,7 +102,7 @@ public class CategoryServiceTest {
 
     @Test
     @DisplayName("Retrieve all categories with pagination should return list of category DTOs")
-    void findAllCategories_WithPagination_ShouldReturnListOfCategoryDtos() {
+    void findAll_WithPagination_ShouldReturnListOfCategoryDtos() {
         // Given
         Pageable pageable = Pageable.unpaged();
         Category category = new Category()
@@ -135,7 +132,7 @@ public class CategoryServiceTest {
 
     @Test
     @DisplayName("Update existing category with valid DTO should return updated category DTO")
-    void updateCategory_ExistingId_ValidDto_ReturnsUpdatedCategoryDto() {
+    void update_ExistingId_ValidDto_ReturnsUpdatedCategoryDto() {
         // Given
         Long categoryId = 1L;
         Category existingCategory = new Category()
@@ -143,7 +140,7 @@ public class CategoryServiceTest {
                 .setName("Old Category Name")
                 .setDescription("Old Description");
 
-        CategoryDto requestDto = new CategoryDto(categoryId, "Updated Category Name", "Updated Description");
+        CategoryRequestDto requestDto = new CategoryRequestDto( "Updated Category Name", "Updated Description");
 
         CategoryDto expectedUpdatedCategoryDto = new CategoryDto(categoryId, "Updated Category Name", "Updated Description");
 
@@ -164,7 +161,7 @@ public class CategoryServiceTest {
 
     @Test
     @DisplayName("Delete category by ID should invoke deleteById on repository")
-    void deleteCategory_ExistingId_ShouldCallDeleteById() {
+    void delete_ExistingId_ShouldCallDeleteById() {
         // Given
         Long categoryId = 1L;
 

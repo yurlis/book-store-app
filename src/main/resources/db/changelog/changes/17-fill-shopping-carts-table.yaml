@@ -15,3 +15,7 @@ databaseChangeLog:
             tableName: shopping_carts
             columns:
               - column: { name: "user_id", valueComputed: "(SELECT id FROM users WHERE email = 'user3@example.com')" }
+        - insert:
+            tableName: shopping_carts
+            columns:
+              - column: { name: "user_id", valueComputed: "(SELECT id FROM users WHERE email = 'admin@example.com')" }

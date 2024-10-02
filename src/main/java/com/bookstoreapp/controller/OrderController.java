@@ -7,6 +7,7 @@ import com.bookstoreapp.dto.order.UpdateOrderStatusRequestDto;
 import com.bookstoreapp.model.User;
 import com.bookstoreapp.service.OrderService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -28,12 +29,13 @@ import java.util.List;
 @RestController
 @RequestMapping("/orders")
 @RequiredArgsConstructor
+@SecurityRequirement(name = "bearerAuth")
 public class OrderController {
     private final OrderService orderService;
 
     @PostMapping
     @PreAuthorize("hasRole('ROLE_USER')")
-    @Operation(summary = "Place a new order",
+    @Operation(summary = "Place a new order (USER)",
             description = "Create a new order for the authenticated user")
     OrderDto placeOrder(Authentication authentication,
                         @RequestBody @Valid PlaceOrderRequestDto requestDto) {
@@ -42,7 +44,7 @@ public class OrderController {
 
     @GetMapping
     @PreAuthorize("hasRole('ROLE_USER')")
-    @Operation(summary = "Get all orders",
+    @Operation(summary = "Get all orders (USER)",
             description = "Get all orders for the authenticated user")
     List<OrderDto> getAllOrders(Authentication authentication, Pageable pageable) {
         return orderService.findAll(getUserId(authentication), pageable);
@@ -50,7 +52,7 @@ public class OrderController {
 
     @PatchMapping("/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @Operation(summary = "Update order status",
+    @Operation(summary = "Update order status (ADMIN)",
             description = "Update the status of the specific order")
     ResponseEntity<Void> updateOrderStatus(@RequestBody @Valid UpdateOrderStatusRequestDto requestDto,
                                @PathVariable Long id) {
@@ -60,7 +62,7 @@ public class OrderController {
 
     @GetMapping("/{orderId}/items")
     @PreAuthorize("hasRole('ROLE_USER')")
-    @Operation(summary = "Get all order items",
+    @Operation(summary = "Get all order items (USER)",
             description = "Get all items for the specific order")
     List<OrderItemDto> getAllOrderItems(Authentication authentication,
                                         @PathVariable Long orderId) {
@@ -69,7 +71,7 @@ public class OrderController {
 
     @GetMapping("{orderId}/items/{itemId}")
     @PreAuthorize("hasRole('ROLE_USER')")
-    @Operation(summary = "Get order item by ID",
+    @Operation(summary = "Get order item by ID (USER)",
             description = "Get a specific order item by its ID")
     OrderItemDto getOrderItem(Authentication authentication,
                               @PathVariable Long itemId,

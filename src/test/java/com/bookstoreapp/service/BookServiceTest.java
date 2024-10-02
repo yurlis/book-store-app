@@ -2,11 +2,13 @@ package com.bookstoreapp.service;
 
 import com.bookstoreapp.dto.book.BookDto;
 import com.bookstoreapp.dto.book.CreateBookRequestDto;
+import com.bookstoreapp.dto.book.UpdateBookRequestDto;
 import com.bookstoreapp.exception.EntityNotFoundException;
 import com.bookstoreapp.mapper.BookMapper;
 import com.bookstoreapp.model.Book;
 import com.bookstoreapp.model.Category;
 import com.bookstoreapp.repository.book.BookRepository;
+import com.bookstoreapp.repository.category.CategoryRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -27,13 +29,12 @@ import static org.mockito.Mockito.*;
 public class BookServiceTest {
     @Mock
     private BookRepository bookRepository;
-
+    @Mock
+    private CategoryRepository categoryRepository;
     @InjectMocks
     private BookServiceImpl bookService;
-
     @Mock
     private BookMapper bookMapper;
-
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
@@ -55,6 +56,7 @@ public class BookServiceTest {
 
         Category category = new Category();
         category.setId(categoryId);
+        category.setName("*Fiction");
 
         Book book = new Book()
                 .setTitle(requestDto.getTitle())
@@ -96,12 +98,13 @@ public class BookServiceTest {
 
     @Test
     @DisplayName("Retrieve book by existing ID should return the correct book details")
-    void findBookById_ExistingId_ReturnsBookDto() {
+    void findById_ExistingId_ReturnsBookDto() {
         // Given
         Long bookId = 3L;
 
         Category category = new Category();
         category.setId(1L);
+        category.setName("*Fiction");
 
         Book book = new Book()
                 .setId(bookId)
@@ -143,7 +146,7 @@ public class BookServiceTest {
 
     @Test
     @DisplayName("Find book by non-existing ID should throw Not Found exception")
-    void findBookById_NotFoundId_ShouldThrowNotFoundException() {
+    void findById_NotFoundId_ShouldThrowNotFoundException() {
         // Given
         Long nonExistentBookId = 999L;
         when(bookRepository.findById(nonExistentBookId)).thenReturn(Optional.empty());
@@ -155,12 +158,13 @@ public class BookServiceTest {
 
     @Test
     @DisplayName("Retrieve all books with pagination should return list of book DTOs")
-    void findAllBooks_WithPagination_ShouldReturnListOfBookDtos() {
+    void findAll_WithPagination_ShouldReturnListOfBookDtos() {
         // Given
         Pageable pageable = Pageable.unpaged();
 
         Category category = new Category();
         category.setId(1L);
+        category.setName("*Fiction");
 
         Book book = new Book()
                 .setTitle("Test Book")
@@ -205,7 +209,7 @@ public class BookServiceTest {
 
     @Test
     @DisplayName("Update existing book with valid request DTO should return updated book DTO")
-    void updateBook_ExistingId_ValidRequestDto_ReturnsUpdatedBookDto() {
+    void update_ExistingId_ValidRequestDto_ReturnsUpdatedBookDto() {
         // Given
         final Long BOOK_ID = 1L;
         final String OLD_TITLE = "Old Title";
@@ -232,7 +236,7 @@ public class BookServiceTest {
                 .setDescription(OLD_DESCRIPTION)
                 .setCoverImage(OLD_COVER_IMAGE);
 
-        CreateBookRequestDto requestDto = new CreateBookRequestDto()
+        UpdateBookRequestDto requestDto = new UpdateBookRequestDto()
                 .setTitle(UPDATED_TITLE)
                 .setAuthor(UPDATED_AUTHOR)
                 .setIsbn(UPDATED_ISBN)
@@ -251,7 +255,12 @@ public class BookServiceTest {
                 .setCoverImage(UPDATED_COVER_IMAGE)
                 .setCategoriesIds(CATEGORIES);
 
+        Category category = new Category();
+        category.setId(1L);
+        category.setName("*Fiction");
+
         when(bookRepository.findById(BOOK_ID)).thenReturn(Optional.of(existingBook));
+        when(categoryRepository.findById(1L)).thenReturn(Optional.of(category));
         when(bookRepository.save(any(Book.class))).thenReturn(existingBook);
         when(bookMapper.toDto(any(Book.class))).thenReturn(expectedUpdatedBookDto);
 

@@ -3,8 +3,10 @@ package com.bookstoreapp.controller;
 import com.bookstoreapp.dto.book.BookDto;
 import com.bookstoreapp.dto.book.BookSearchParameters;
 import com.bookstoreapp.dto.book.CreateBookRequestDto;
+import com.bookstoreapp.dto.book.UpdateBookRequestDto;
 import com.bookstoreapp.service.BookService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -27,10 +29,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(value = "/books")
+@SecurityRequirement(name = "bearerAuth")
 public class BookController {
     private final BookService bookService;
 
-    @Operation(summary = "Get all books",
+    @Operation(summary = "Get all books (USER)",
             description = "Get a list of all available books with optional pagination")
     @GetMapping
     @PreAuthorize("hasRole('ROLE_USER')")
@@ -38,7 +41,7 @@ public class BookController {
         return bookService.findAll(pageable);
     }
 
-    @Operation(summary = "Get book by Id",
+    @Operation(summary = "Get book by Id (USER)",
             description = "Get a specific book by unique Id")
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('ROLE_USER')")
@@ -46,7 +49,7 @@ public class BookController {
         return bookService.findById(id);
     }
 
-    @Operation(summary = "Create a new book", description = "Add a new book to the BookStore")
+    @Operation(summary = "Create a new book (ADMIN)", description = "Add a new book to the BookStore")
     @PostMapping
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @ResponseStatus(HttpStatus.CREATED)
@@ -55,16 +58,16 @@ public class BookController {
     }
 
     @PutMapping("/{id}")
-    @Operation(summary = "Update a book",
+    @Operation(summary = "Update a book (ADMIN)",
             description = "Update an existing book by specifying parameters")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public BookDto updateBook(@PathVariable(name = "id") Long id,
-                              @RequestBody @Valid CreateBookRequestDto requestDto) {
+                              @RequestBody UpdateBookRequestDto requestDto) {
         return bookService.update(id, requestDto);
     }
 
     @DeleteMapping("/{id}")
-    @Operation(summary = "Delete a book",
+    @Operation(summary = "Delete a book (ADMIN)",
             description = "Delete a specific book from the BookStore by unique Id")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -73,7 +76,7 @@ public class BookController {
     }
 
     @GetMapping("/search")
-    @Operation(summary = "Search books",
+    @Operation(summary = "Search books (USER)",
             description = "Search book list by dynamically specify criteria to filter desired books")
     @PreAuthorize("hasRole('ROLE_USER')")
     public List<BookDto> searchBooks(BookSearchParameters searchParameters) {
