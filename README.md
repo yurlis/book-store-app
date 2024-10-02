@@ -4,6 +4,8 @@
 ## **INTRODUCTION**
 BookStoreApp is a comprehensive RESTful API backend for managing an online bookstore. It provides secure user authentication, streamlined book management, and efficient order processing. The app is designed to solve key challenges such as ensuring authentication security, effective management of the book collection, and enhancing the shopping experience for users.
 
+This project was developed independently during my studies at MATE Academy as part of the Java Developer course. While working on this project, I explored numerous technological aspects and gained valuable experience by experimenting and setting myself additional tasks beyond the course requirements. This approach allowed me to deepen my knowledge and improve my skills.
+
 ### User Interaction
 The application allows different types of users, including administrators and regular users, to interact seamlessly with the book collection and manage their orders.
 
